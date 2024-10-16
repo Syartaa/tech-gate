@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/screens/login_screen.dart';
+import 'package:tech_gate/screens/signup_screen.dart';
 import 'package:tech_gate/widgets/welcome_slider.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -16,7 +18,11 @@ class WelcomeScreen extends StatelessWidget {
             const WelcomeSlider(),
             const SizedBox(height: 45),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SignupScreen()),
+                );
+              },
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
@@ -46,11 +52,13 @@ class WelcomeScreen extends StatelessWidget {
                 }),
               ),
             ),
-            SizedBox(
-              height: 15,
-            ),
+            const SizedBox(height: 15),
             TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                },
                 child: Text(
                   "Une kam nje llogari",
                   style: GoogleFonts.poppins(

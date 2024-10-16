@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Tech Gate',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: const Color(0xFFEC1D3B), // Red from the logo
           scaffoldBackgroundColor:
