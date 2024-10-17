@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/screens/bottom_app_bar.dart';
+import 'package:tech_gate/screens/home_screen.dart';
 import 'package:tech_gate/screens/signup_screen.dart';
+import 'package:tech_gate/widgets/custom_appbar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,32 +26,15 @@ class _LoginScreenState extends State<LoginScreen> {
         SnackBar(content: Text('Logging in as $email')),
       );
 
-      // Add navigation or API call logic here
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => BottomAppBars()));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50.0), // Adjust height as needed
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0),
-          ),
-          child: Container(
-            color:
-                Theme.of(context).colorScheme.primary, // Set your desired color
-            child: AppBar(
-              backgroundColor:
-                  Colors.transparent, // Make the AppBar background transparent
-              elevation: 0, // Remove shadow
-              title: const Text(''),
-            ),
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -111,7 +97,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                           width: 1.5),
                                     ),
                                   ),
-                                  style: const TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter your email';
@@ -153,7 +142,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   obscureText: true,
-                                  style: const TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter your password';

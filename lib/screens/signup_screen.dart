@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/widgets/custom_appbar.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -38,18 +39,10 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF001120), // Dark background color
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0), // Adjust height if needed
-        child: AppBar(
-          backgroundColor: const Color(0xFFEC1D3B), // Red AppBar
-          elevation: 0, // No shadow
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-      ),
+      backgroundColor:
+          Theme.of(context).colorScheme.secondary, // Dark background color
+      appBar: CustomAppBar(),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
