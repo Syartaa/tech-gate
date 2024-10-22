@@ -1,38 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/screens/bottom_app_bar.dart';
-import 'package:tech_gate/screens/home_screen.dart';
 import 'package:tech_gate/screens/signup_screen.dart';
 import 'package:tech_gate/widgets/custom_appbar.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login() {
+  void _login() async {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
       final password = _passwordController.text;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Logging in as $email')),
-      );
+      try {
+        // Call the login method from userProvider
+        await ref.read(userProvider.notifier).login(email, password);
 
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => BottomAppBars()));
+        // If login is successful, navigate to the BottomAppBars screen
+        if (context.mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => BottomAppBars()),
+          );
+        }
+      } catch (e) {
+        // Show error message if login fails
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed: $e')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userProvider);
+
     return Scaffold(
       appBar: CustomAppBar(),
       body: LayoutBuilder(
@@ -82,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       borderSide:
-                                          BorderSide(color: Colors.white),
+                                          const BorderSide(color: Colors.white),
                                     ),
                                     focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -126,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       borderSide:
-                                          BorderSide(color: Colors.white),
+                                          const BorderSide(color: Colors.white),
                                     ),
                                     focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -162,7 +175,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.8,
                                   child: ElevatedButton(
-                                    onPressed: _login,
+                                    onPressed: userState.isLoading
+                                        ? null
+                                        : _login, // Disable button while loading
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 15),
@@ -171,11 +186,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    child: const Text(
-                                      'Login',
-                                      style: TextStyle(
-                                          fontSize: 18, color: Colors.white),
-                                    ),
+                                    child: userState.isLoading
+                                        ? const CircularProgressIndicator(
+                                            color: Colors.white,
+                                          )
+                                        : const Text(
+                                            'Login',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white),
+                                          ),
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),

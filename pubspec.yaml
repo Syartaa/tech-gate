@@ -22,12 +22,29 @@ dependencies:
   path_provider: ^2.1.4
   pdfx: ^2.8.0
   device_info_plus: ^10.1.2
+  google_maps_flutter: ^2.9.0
+  location: ^7.0.1
+  http: ^1.2.2
+  uuid: ^4.5.1
+  flutter_riverpod: ^2.6.0
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_database: ^11.1.4
+  intl: ^0.19.0
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
+  flutter_launcher_icons: ^0.14.1
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/logo2.png"
+  adaptive_icon_backgorund: "wffffff"
+  adaptive_icon_foregorund: "assets/logo2.png"
   flutter_lints: ^4.0.0
 
 

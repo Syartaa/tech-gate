@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For rootBundle
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tech_gate/widgets/custom_appbar.dart';
 
 class FlyerViewer extends StatefulWidget {
   final String pdfPath;
@@ -38,10 +39,7 @@ class _FlyerViewerState extends State<FlyerViewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: const Color(0xFFEC1D3B), // Red theme color
-      ),
+      appBar: CustomAppBar(),
       body: localPath != null
           ? PDFView(
               filePath: localPath,

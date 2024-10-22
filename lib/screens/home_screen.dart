@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tech_gate/data/flyer_dummy_data.dart';
+import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/screens/cart_screen.dart';
 import 'package:tech_gate/widgets/flyer_slider.dart';
-import 'package:tech_gate/widgets/welcome_slider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userAsyncValue = ref.watch(userProvider);
+
     return ListView(
       children: [
         SizedBox(
@@ -32,13 +35,21 @@ class HomeScreen extends StatelessWidget {
           margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20), color: Colors.white),
-          child: Text(
-            "Pershendetje Syarta",
-            style: GoogleFonts.poppins(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.secondary),
-            textAlign: TextAlign.center,
+          child: userAsyncValue.when(
+            data: (user) {
+              final userName = user?.firstName ?? "User"; // Default if null
+              return Text(
+                "Pershendetje $userName", // Display the user's first name
+                style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.secondary),
+                textAlign: TextAlign.center,
+              );
+            },
+            loading: () => const Center(
+                child: CircularProgressIndicator()), // Show loading indicator
+            error: (error, stack) => Text('Error: $error'), // Handle error
           ),
         ),
         const SizedBox(
@@ -58,22 +69,22 @@ class HomeScreen extends StatelessWidget {
                 style: GoogleFonts.poppins(
                     fontSize: 25,
                     fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.secondary),
+                    color: Colors.white),
               ),
               const Icon(
                 Icons.shopping_cart,
                 size: 35,
-                color: Colors.black,
+                color: Colors.white,
               ),
               IconButton(
                   onPressed: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) => CartScreen()));
-                    ;
                   },
                   icon: const Icon(
                     Icons.arrow_forward_ios,
                     size: 35,
+                    color: Colors.white,
                   ))
             ],
           ),
@@ -103,9 +114,15 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.white, fontSize: 36, fontWeight: FontWeight.w500),
           ),
         ),
+        const SizedBox(
+          height: 10,
+        ),
         FlyerSlider(
           flyers: flyers,
         ),
+        const SizedBox(
+          height: 20,
+        )
       ],
     );
   }

@@ -1,10 +1,167 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/provider/user_provider.dart';
+import 'package:tech_gate/screens/home_screen.dart';
+import 'package:tech_gate/widgets/profile_option.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold();
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Get user details from userProvider
+    final userAsyncValue = ref.watch(userProvider);
+
+    return userAsyncValue.when(
+      data: (user) {
+        // Extract first name, last name, and phone number from user object
+        final firstName = user?.firstName ?? "First Name";
+        final lastName = user?.lastName ?? "Last Name";
+        final phoneNumber = user?.phoneNumber ?? "Phone number";
+
+        return ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "$firstName $lastName",
+                        style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        phoneNumber,
+                        style: GoogleFonts.poppins(
+                          color: const Color.fromARGB(162, 255, 255, 255),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                  CircleAvatar(
+                    backgroundColor: const Color.fromARGB(255, 241, 240, 237),
+                    radius: 25,
+                  ),
+                ],
+              ),
+            ),
+            ProfileOption(
+              title: "Ndrysho profilin",
+              onTap: () {
+                // Navigate to profile edit screen
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              },
+            ),
+            ProfileOption(
+              title: "Ndrysho Fjalekalimin",
+              icon: Icons.lock, // Custom icon
+              onTap: () {
+                // Navigate to change password screen
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              },
+            ),
+            ProfileOption(
+              title: "Fshij llogarine",
+              icon: Icons.no_accounts_outlined, // Custom icon
+              onTap: () {
+                // Navigate to delete account screen
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              },
+            ),
+            ProfileOption(
+              title: "Shperblimet",
+              icon: Icons.card_giftcard, // Custom icon
+              onTap: () {
+                // Navigate to rewards screen
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              },
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 180,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Blerjet kete muaj (fizike)",
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        "0.0 \$",
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 35,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Container(
+                  width: 180,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Blerjet kete muaj (online)",
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        "0.0 \$",
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 35,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Error: $error')),
+    );
   }
 }

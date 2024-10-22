@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/models/user.dart';
+import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/widgets/custom_appbar.dart';
+import 'package:intl/intl.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -23,21 +27,60 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _postalCodeController = TextEditingController();
 
   String _gender = 'Male'; // Default gender
+  DateTime? _selectedBirthday;
 
-  void _signup() {
+  // Method to open the DatePicker dialog
+  Future<void> _selectBirthday(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000), // Default date
+      firstDate: DateTime(1900), // Minimum date
+      lastDate: DateTime.now(), // Maximum date
+    );
+    if (pickedDate != null && pickedDate != _selectedBirthday) {
+      setState(() {
+        _selectedBirthday = pickedDate; // Store selected date
+      });
+    }
+  }
+
+  void _signup() async {
     if (_formKey.currentState!.validate()) {
-      final email = _emailController.text;
+      try {
+        final gender = _gender == 'Male' ? Gender.male : Gender.female;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Signing up as $email')),
-      );
+        // Call the signUp method from userProvider
+        await ref.read(userProvider.notifier).signUp(
+              email: _emailController.text,
+              password: _passwordController.text,
+              firstName: _firstNameController.text,
+              lastName: _lastNameController.text,
+              birthday:
+                  _selectedBirthday!, // No need to parse from the text field
+              // Parse birthday
+              phoneNumber: _phoneNumberController.text,
+              gender: gender,
+              city: _cityController.text,
+              postalCode: int.parse(_postalCodeController.text),
+            );
 
-      // Add your signup logic here (e.g., API call)
+        // Navigate back to login or another screen after successful signup
+        if (context.mounted) {
+          Navigator.pop(context); // Return to login screen
+        }
+      } catch (e) {
+        // Show error if signup fails
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Signup failed: $e')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userProvider);
+
     return Scaffold(
       backgroundColor:
           Theme.of(context).colorScheme.secondary, // Dark background color
@@ -61,7 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     children: [
                       // Logo
                       Image.asset(
-                        'assets/logo.png', // Use the same logo from the login screen
+                        'assets/logo.png',
                         height: 60,
                       ),
                       const SizedBox(height: 10),
@@ -107,11 +150,45 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       const SizedBox(height: 16.0),
 
-                      // Birthday Field
-                      _buildInputField(
-                        controller: _birthdayController,
-                        label: 'Birthday (DD/MM/YYYY)',
+                      // Birthday Field with DatePicker
+                      GestureDetector(
+                        onTap: () =>
+                            _selectBirthday(context), // Open DatePicker on tap
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: TextEditingController(
+                              text: _selectedBirthday != null
+                                  ? DateFormat('yyyy-MM-dd')
+                                      .format(_selectedBirthday!)
+                                  : '', // Display the selected date if available
+                            ),
+                            style: TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                              labelText: 'Birthday',
+                              hintText:
+                                  'Select your birthday', // Shown when no date is selected
+                              suffixIcon: const Icon(Icons.calendar_today,
+                                  color: Colors.grey), // Calendar icon
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xFFEC1D3B), width: 1.5),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (_selectedBirthday == null) {
+                                return 'Please select your birthday';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
                       ),
+
                       const SizedBox(height: 16.0),
 
                       // Phone Number Field
@@ -205,31 +282,35 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: ElevatedButton(
-                          onPressed: _signup,
+                          onPressed: userState.isLoading ? null : _signup,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xFFEC1D3B), // Red button color
+                            backgroundColor: const Color(0xFFEC1D3B),
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: const Text(
-                            'Sign Up',
-                            style: TextStyle(fontSize: 18, color: Colors.white),
-                          ),
+                          child: userState.isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
                         ),
                       ),
                       const SizedBox(height: 10),
 
                       // Navigate to Login
                       TextButton(
-                        onPressed: () =>
-                            Navigator.pop(context), // Go back to login
+                        onPressed: () => Navigator.pop(context),
                         child: Text(
                           "Already have an account? Login",
                           style: GoogleFonts.poppins(
-                              color: Theme.of(context).colorScheme.secondary),
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
                       ),
                     ],
@@ -253,6 +334,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return TextFormField(
       controller: controller,
       obscureText: isPassword,
+      style: TextStyle(color: Colors.black),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.black),
@@ -266,7 +348,9 @@ class _SignupScreenState extends State<SignupScreen> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.secondary, width: 1.5),
+            color: Theme.of(context).colorScheme.secondary,
+            width: 1.5,
+          ),
         ),
       ),
       validator: validator,
