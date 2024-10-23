@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tech_gate/screens/cart_screen.dart';
+import 'package:tech_gate/screens/products/cart_screen.dart';
 import 'package:tech_gate/screens/home_screen.dart';
 import 'package:tech_gate/screens/location_screen.dart';
 import 'package:tech_gate/screens/profile_screen.dart';

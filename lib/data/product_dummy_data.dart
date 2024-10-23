@@ -1,0 +1,53 @@
+import 'package:tech_gate/models/product.dart';
+
+List<Product> dummyProducts = [
+  Product(
+    name: 'iPhone 14 Pro',
+    description:
+        'The latest iPhone with A16 Bionic chip and Pro camera system.',
+    category: Category.telefona,
+    price: 999.99,
+    brand: 'Apple',
+    model: '14 Pro',
+    releaseDate: DateTime(2023, 9, 14),
+    imageUrl: 'assets/4.jpg',
+    warranty: '1 year limited warranty',
+    availability: true,
+  ),
+  Product(
+    name: 'MacBook Pro 16"',
+    description: 'Powerful laptop with M1 Max chip, perfect for professionals.',
+    category: Category.laptop,
+    price: 2499.99,
+    brand: 'Apple',
+    model: 'M1 Max',
+    releaseDate: DateTime(2022, 11, 10),
+    imageUrl: 'assets/4.jpg',
+    warranty: '2 years AppleCare',
+    availability: true,
+  ),
+  Product(
+    name: 'Samsung Galaxy Watch 6',
+    description: 'Smartwatch with health tracking and long battery life.',
+    category: Category.smartwatch,
+    price: 399.99,
+    brand: 'Samsung',
+    model: 'Galaxy Watch 6',
+    releaseDate: DateTime(2023, 6, 1),
+    imageUrl: 'assets/4.jpg',
+    warranty: '2 years warranty',
+    availability: false,
+  ),
+  Product(
+    name: 'Sony Bravia 55" 4K TV',
+    description: 'Ultra HD Smart TV with stunning visuals and Dolby Vision.',
+    category: Category.tv,
+    price: 1199.99,
+    brand: 'Sony',
+    model: 'Bravia XR',
+    releaseDate: DateTime(2023, 4, 5),
+    imageUrl: 'assets/4.jpg',
+    warranty: '5 years extended warranty',
+    availability: true,
+  ),
+];
