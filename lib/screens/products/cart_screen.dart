@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/provider/category_provider.dart';
 import 'package:tech_gate/provider/product_provider.dart';
 import 'package:tech_gate/widgets/product/product.dart';
 import 'package:tech_gate/widgets/product/product_categories.dart';
@@ -11,6 +13,7 @@ class CartScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch product provider to get dummy products
     final products = ref.watch(productProvider);
+    final categories = ref.watch(categoryProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF0F1B2B),
@@ -21,31 +24,21 @@ class CartScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ProductCategories(
-                  image: 'assets/4.jpg',
-                  name: 'IT',
-                ),
-                ProductCategories(
-                  image: 'assets/4.jpg',
-                  name: 'Phone',
-                ),
-                ProductCategories(
-                  image: 'assets/4.jpg',
-                  name: 'Elektro',
-                ),
-                ProductCategories(
-                  image: 'assets/4.jpg',
-                  name: 'Ftohje',
-                ),
-                ProductCategories(
-                  image: 'assets/4.jpg',
-                  name: 'Pajisje',
-                ),
-              ],
+              children: categories.map((category) {
+                return ProductCategories(
+                  category: category, // Pass the Category object
+                );
+              }).toList(),
             ),
           ),
 
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Produktet e fundit",
+              style: GoogleFonts.poppins(color: Colors.white, fontSize: 22),
+            ),
+          ),
           // Product Grid Section
           Expanded(
             child: GridView.builder(
@@ -62,6 +55,9 @@ class CartScreen extends ConsumerWidget {
               },
             ),
           ),
+          SizedBox(
+            height: 50,
+          )
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:tech_gate/models/category.dart';
 import 'package:tech_gate/models/product.dart';
 
 List<Product> dummyProducts = [
@@ -5,7 +6,7 @@ List<Product> dummyProducts = [
     name: 'iPhone 14 Pro',
     description:
         'The latest iPhone with A16 Bionic chip and Pro camera system.',
-    category: Category.telefona,
+    category: CategoryName.Telefona,
     price: 999.99,
     brand: 'Apple',
     model: '14 Pro',
@@ -13,11 +14,12 @@ List<Product> dummyProducts = [
     imageUrl: 'assets/4.jpg',
     warranty: '1 year limited warranty',
     availability: true,
+    color: 'Space Black',
   ),
   Product(
     name: 'MacBook Pro 16"',
     description: 'Powerful laptop with M1 Max chip, perfect for professionals.',
-    category: Category.laptop,
+    category: CategoryName.Laptop,
     price: 2499.99,
     brand: 'Apple',
     model: 'M1 Max',
@@ -25,11 +27,12 @@ List<Product> dummyProducts = [
     imageUrl: 'assets/4.jpg',
     warranty: '2 years AppleCare',
     availability: true,
+    color: 'Silver',
   ),
   Product(
     name: 'Samsung Galaxy Watch 6',
     description: 'Smartwatch with health tracking and long battery life.',
-    category: Category.smartwatch,
+    category: CategoryName.Smartwatch,
     price: 399.99,
     brand: 'Samsung',
     model: 'Galaxy Watch 6',
@@ -37,11 +40,12 @@ List<Product> dummyProducts = [
     imageUrl: 'assets/4.jpg',
     warranty: '2 years warranty',
     availability: false,
+    color: 'Graphite',
   ),
   Product(
     name: 'Sony Bravia 55" 4K TV',
     description: 'Ultra HD Smart TV with stunning visuals and Dolby Vision.',
-    category: Category.tv,
+    category: CategoryName.Tv,
     price: 1199.99,
     brand: 'Sony',
     model: 'Bravia XR',
@@ -49,5 +53,32 @@ List<Product> dummyProducts = [
     imageUrl: 'assets/4.jpg',
     warranty: '5 years extended warranty',
     availability: true,
+    color: 'Black',
+  ),
+  Product(
+    name: 'Sony Bravia 65" 4K TV',
+    description: 'Larger variant of the Bravia series with Dolby Vision.',
+    category: CategoryName.Tv,
+    price: 1499.99,
+    brand: 'Sony',
+    model: 'Bravia XR',
+    releaseDate: DateTime(2023, 4, 5),
+    imageUrl: 'assets/4.jpg',
+    warranty: '5 years extended warranty',
+    availability: true,
+    color: 'Black',
+  ),
+  Product(
+    name: 'Apple AirPods Pro (2nd Gen)',
+    description: 'Wireless earbuds with active noise cancellation.',
+    category: CategoryName.Telefona,
+    price: 249.99,
+    brand: 'Apple',
+    model: 'AirPods Pro',
+    releaseDate: DateTime(2022, 9, 23),
+    imageUrl: 'assets/4.jpg',
+    warranty: '1 year warranty',
+    availability: true,
+    color: 'White',
   ),
 ];

@@ -1,33 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/models/category.dart';
+import 'package:tech_gate/screens/products/category_products_screen.dart'; // Import your Category model
 
-class ProductCategories extends StatefulWidget {
-  String image;
-  String name;
-  ProductCategories({super.key, required this.image, required this.name});
+class ProductCategories extends StatelessWidget {
+  final Category
+      category; // Accept a Category object instead of individual strings
 
-  @override
-  State<ProductCategories> createState() => _ProductCategoriesState();
-}
+  const ProductCategories({super.key, required this.category});
 
-class _ProductCategoriesState extends State<ProductCategories> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.all(10),
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), color: Colors.white),
-          child: Image.asset(widget.image),
-        ),
-        Text(
-          widget.name,
-          style: GoogleFonts.poppins(color: Colors.white),
-        )
-      ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CategoryProductsScreen(
+                  category: category,
+                )));
+      },
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(10),
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              // borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Image.asset(
+              category.thumbnailImage,
+              fit: BoxFit.fitHeight,
+            ), // Use the image from the Category model
+          ),
+          Text(
+            category.categoryName.name, // Display the enum name as a string
+            style: GoogleFonts.poppins(color: Colors.white),
+          ),
+        ],
+      ),
     );
   }
 }

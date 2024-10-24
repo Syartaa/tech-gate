@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/screens/home_screen.dart';
+import 'package:tech_gate/screens/welcome_screen.dart';
 import 'package:tech_gate/widgets/profile_option.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -57,9 +59,9 @@ class ProfileScreen extends ConsumerWidget {
               title: "Ndrysho profilin",
               onTap: () {
                 // Navigate to profile edit screen
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(builder: (context) => HomeScreen()),
+                // );
               },
             ),
             ProfileOption(
@@ -90,6 +92,15 @@ class ProfileScreen extends ConsumerWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => HomeScreen()),
                 );
+              },
+            ),
+            ProfileOption(
+              title: "Ç'kyçu",
+              icon: Icons.logout, // Custom icon
+              onTap: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => WelcomeScreen()));
               },
             ),
             const SizedBox(height: 30),
@@ -156,6 +167,9 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 20,
             ),
           ],
         );

@@ -15,13 +15,15 @@ class BottomAppBars extends StatefulWidget {
 class _BottomAppBarsState extends State<BottomAppBars> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
+  // List of screens managed by the bottom navigation bar
+  static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     CartScreen(),
     LocationScreen(),
     ProfileScreen(),
   ];
 
+  // Method to handle tab switching
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -30,53 +32,61 @@ class _BottomAppBarsState extends State<BottomAppBars> {
 
   @override
   Widget build(BuildContext context) {
+    // Conditionally show basket icon only on the CartScreen (index 1)
+    bool showBasketIcon = _selectedIndex == 1;
+
     return Scaffold(
-      extendBody: true, // Extend body behind BottomNavigationBar
-      appBar: CustomAppBar(), // Your custom AppBar
+      extendBody: true, // Extend body behind the BottomNavigationBar
+      appBar:
+          CustomAppBar(showBasketIcon: showBasketIcon), // Pass the parameter
       body: _widgetOptions[_selectedIndex], // Display the selected screen
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary, // Background color
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+
+  // Extracted BottomNavigationBar for better readability
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 5,
+            blurRadius: 10,
+            offset: const Offset(0, -2),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 5,
-              blurRadius: 10,
-              offset: const Offset(0, -2), // Shadow above the navbar
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: 'Blej online',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.location_on),
-              label: 'Dyqanet',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor:
-              Theme.of(context).colorScheme.secondary, // Selected tab color
-          onTap: _onItemTapped,
-          backgroundColor: Colors.transparent, // Avoid color conflicts
-          elevation: 0, // No elevation since shadow is applied in Container
-        ),
+        ],
+      ),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Blej online',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.location_on),
+            label: 'Dyqanet',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Theme.of(context).colorScheme.secondary,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
     );
   }
