@@ -19,7 +19,7 @@ final List<Category> dummyCategories = [
   Category(
     thumbnailImage: 'assets/tv.jpg',
     categoryName: CategoryName.Tv,
-    fullImage: 'assets/laptops.jpg',
+    fullImage: 'assets/tvs.jpg',
   ),
   Category(
     thumbnailImage: 'assets/elektro.jpg',

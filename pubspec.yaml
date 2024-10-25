@@ -37,15 +37,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.14.1
-flutter_launcher_icons:
-  android: true
-  ios: true
-  remove_alpha_ios: true
-  image_path: "assets/logo2.png"
-  adaptive_icon_backgorund: "wffffff"
-  adaptive_icon_foregorund: "assets/logo2.png"
-  flutter_lints: ^4.0.0
+
 
 
 
