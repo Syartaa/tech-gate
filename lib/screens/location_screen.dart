@@ -59,7 +59,8 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   Future<void> _fetchAddress(double latitude, double longitude) async {
-    final apiKey = 'YOUR_API_KEY'; // Replace with your real API key
+    final apiKey =
+        'AIzaSyDST1RamxpF9Ql_znBxRbzZpZnzoR2g6i4'; // Replace with your real API key
     final url =
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey';
 

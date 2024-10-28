@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tech_gate/provider/shop_card_provider.dart';
+import 'package:tech_gate/screens/delivery_details_screen.dart';
 import 'package:tech_gate/widgets/product/shop_product_card.dart';
 
 class ShopCardScreen extends ConsumerWidget {
@@ -15,11 +16,31 @@ class ShopCardScreen extends ConsumerWidget {
         0, (sum, item) => sum + item.price * item.quantity);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Shopping Cart", style: GoogleFonts.poppins()),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        elevation: 1,
+      appBar: PreferredSize(
+        preferredSize:
+            const Size.fromHeight(60), // Set custom height for AppBar
+        child: AppBar(
+          backgroundColor:
+              Theme.of(context).colorScheme.primary, // AppBar color
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Shopping Cart",
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+              ), // Display category name
+              Image.asset(
+                'assets/logo.png', // Add your logo image here
+                height: 30,
+              ),
+            ],
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30), // Bottom border rounded
+            ),
+          ),
+        ),
       ),
       body: shopCardProducts.isEmpty
           ? Center(
@@ -61,7 +82,10 @@ class ShopCardScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => DeliveryDetailsScreen()));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               Theme.of(context).colorScheme.primary,

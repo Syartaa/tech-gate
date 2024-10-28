@@ -21,6 +21,29 @@ class ShopCardNotifier extends StateNotifier<List<Product>> {
       return item;
     }).toList();
   }
+
+  Future<void> checkout() async {
+    try {
+      // Simulate an API call with a delay
+      await Future.delayed(Duration(seconds: 2));
+
+      // Log the current products in the basket for testing
+      print('Checking out the following products:');
+      for (var product in state) {
+        print('Product ID: ${product.id}, Quantity: ${product.quantity}');
+      }
+
+      // Clear the basket after "checkout"
+      state = [];
+    } catch (error) {
+      // Handle any potential errors here
+      print('Checkout failed: $error');
+    }
+  }
+
+  double calculateTotalPrice() {
+    return state.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+  }
 }
 
 final shopCardProvider =

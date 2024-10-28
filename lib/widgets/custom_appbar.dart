@@ -47,20 +47,32 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           child: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: const SizedBox.shrink(), // Remove back button
+            //leading: const SizedBox.shrink(), // Remove back button
             title: Row(
+              mainAxisAlignment: showBasketIcon
+                  ? MainAxisAlignment.spaceBetween // Adjust this for icons
+                  : MainAxisAlignment
+                      .center, // Center logo when icons are absent
               children: [
-                if (showBasketIcon) const Spacer(), // Push logo towards center
+                if (showBasketIcon)
+                  const Spacer(), // Adds spacing if icons present
 
                 // Centered Logo
-                Image.asset(
-                  'assets/logo.png', // Replace with your logo path
-                  height: 50,
-                  width: 100,
-                  fit: BoxFit.contain,
+                Center(
+                  child: Image.asset(
+                    'assets/logo.png', // Replace with your logo path
+                    height: 50,
+                    width: 100,
+                    fit: BoxFit.contain,
+                  ),
                 ),
+                if (!showBasketIcon)
+                  SizedBox(
+                    width: 30,
+                  ),
 
-                if (showBasketIcon) const Spacer(), // Align icons properly
+                if (showBasketIcon)
+                  const Spacer(), // Adds spacing for proper alignment when icons are present
 
                 // Icons only if showBasketIcon is true
                 if (showBasketIcon)

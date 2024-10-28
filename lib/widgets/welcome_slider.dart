@@ -43,7 +43,7 @@ class _WelcomeSliderState extends State<WelcomeSlider> {
             );
           }).toList(),
           options: CarouselOptions(
-            autoPlay: false,
+            autoPlay: true,
             height: 600,
             aspectRatio: 16 / 9,
             viewportFraction: 0.8,

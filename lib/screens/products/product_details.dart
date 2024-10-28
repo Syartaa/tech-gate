@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tech_gate/models/product.dart';
+import 'package:tech_gate/provider/shop_card_provider.dart';
+import 'package:tech_gate/screens/products/shop_card_screen.dart';
 
-class ProductDetailsPage extends StatelessWidget {
+class ProductDetailsPage extends ConsumerWidget {
   final Product product;
 
   const ProductDetailsPage({
@@ -11,13 +14,28 @@ class ProductDetailsPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFff3e3e),
-        title: Text(
-          product.name,
-          style: GoogleFonts.poppins(),
+      appBar: PreferredSize(
+        preferredSize:
+            const Size.fromHeight(60), // Set custom height for AppBar
+        child: AppBar(
+          backgroundColor:
+              Theme.of(context).colorScheme.primary, // AppBar color
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                product.name,
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+              ), // Display category name
+            ],
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30), // Bottom border rounded
+            ),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -25,15 +43,39 @@ class ProductDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
+            // Product Image with "Not in Stock" overlay
             Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  product.imageUrl,
-                  fit: BoxFit.contain,
-                  height: 250,
-                ),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Center(
+                      child: Image.asset(
+                        product.imageUrl,
+                        fit: BoxFit.contain,
+                        height: 250,
+                      ),
+                    ),
+                  ),
+                  if (!product.availability)
+                    Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Not in Stock',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
@@ -48,7 +90,7 @@ class ProductDetailsPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // Product Price
+            // Product Price and Availability Badge
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -60,7 +102,6 @@ class ProductDetailsPage extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                // Availability Badge
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -173,10 +214,16 @@ class ProductDetailsPage extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: product.availability
                     ? () {
-                        // Handle Add to Cart Logic
+                        // Add to Cart Logic
+                        ref.read(shopCardProvider.notifier).addProduct(product);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${product.name} added to cart!'),
+                          ),
+                        );
                       }
                     : null,
-                icon: Icon(
+                icon: const Icon(
                   Icons.shopping_cart,
                   color: Colors.white,
                 ),
