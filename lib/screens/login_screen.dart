@@ -27,17 +27,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // Call the login method from userProvider
         await ref.read(userProvider.notifier).login(email, password);
 
-        // If login is successful, navigate to the BottomAppBars screen
-        if (context.mounted) {
-          Navigator.of(context).pushReplacement(
+        // Check the state after attempting login
+        final userState = ref.read(userProvider);
+        print('User state after login: $userState');
+
+        // Navigate only if the user is successfully loaded
+        if (userState.value != null && context.mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => BottomAppBars()),
+            (route) => false,
           );
         }
       } catch (e) {
-        // Show error message if login fails
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed: $e')),
-        );
+        // Show an alert if login fails
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Login Failed'),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
       }
     }
   }

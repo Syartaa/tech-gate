@@ -4,8 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/screens/home_screen.dart';
+import 'package:tech_gate/screens/profile/change_password.dart';
+import 'package:tech_gate/screens/profile/change_profile.dart';
+import 'package:tech_gate/screens/profile/delete_account.dart';
+import 'package:tech_gate/screens/profile/gifts.dart';
 import 'package:tech_gate/screens/welcome_screen.dart';
-import 'package:tech_gate/widgets/profile_option.dart';
+import 'package:tech_gate/widgets/profile/profile_option.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -58,10 +62,10 @@ class ProfileScreen extends ConsumerWidget {
             ProfileOption(
               title: "Ndrysho profilin",
               onTap: () {
-                // Navigate to profile edit screen
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(builder: (context) => HomeScreen()),
-                // );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => ChangeProfileScreen()),
+                );
               },
             ),
             ProfileOption(
@@ -70,7 +74,7 @@ class ProfileScreen extends ConsumerWidget {
               onTap: () {
                 // Navigate to change password screen
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => ChangePassword()),
                 );
               },
             ),
@@ -80,7 +84,7 @@ class ProfileScreen extends ConsumerWidget {
               onTap: () {
                 // Navigate to delete account screen
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => DeleteAccount()),
                 );
               },
             ),
@@ -90,7 +94,7 @@ class ProfileScreen extends ConsumerWidget {
               onTap: () {
                 // Navigate to rewards screen
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => Gifts()),
                 );
               },
             ),

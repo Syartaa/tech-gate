@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tech_gate/models/product.dart';
 import 'package:tech_gate/provider/shop_card_provider.dart';
 
-class CheckoutSummaryPage extends ConsumerWidget {
-  final List<Product> selectedProducts; // Change to a list of products
+class CheckoutSummaryPage extends ConsumerStatefulWidget {
+  final List<Product> selectedProducts;
   final String paymentMethod;
   final double totalPrice;
 
@@ -16,7 +16,15 @@ class CheckoutSummaryPage extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CheckoutSummaryPage> createState() =>
+      _CheckoutSummaryPageState();
+}
+
+class _CheckoutSummaryPageState extends ConsumerState<CheckoutSummaryPage> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     final shopCardNotifier = ref.watch(shopCardProvider.notifier);
 
     return Scaffold(
@@ -57,8 +65,7 @@ class CheckoutSummaryPage extends ConsumerWidget {
                   color: Colors.white),
             ),
             const SizedBox(height: 10),
-            // Displaying the selected products
-            ...selectedProducts.map((product) => ListTile(
+            ...widget.selectedProducts.map((product) => ListTile(
                   title: Text(product.name,
                       style: GoogleFonts.poppins(
                           fontSize: 16, color: Colors.white)),
@@ -68,7 +75,7 @@ class CheckoutSummaryPage extends ConsumerWidget {
             const Divider(thickness: 2),
             const SizedBox(height: 10),
             Text(
-              "Total Price: \$${totalPrice.toStringAsFixed(2)}",
+              "Total Price: \$${widget.totalPrice.toStringAsFixed(2)}",
               style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -76,33 +83,41 @@ class CheckoutSummaryPage extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Payment Method: $paymentMethod",
+              "Payment Method: ${widget.paymentMethod}",
               style: GoogleFonts.poppins(fontSize: 16, color: Colors.white),
             ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async {
-                  await shopCardNotifier.checkout(); // Perform checkout action
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text("Order Confirmed"),
-                      content: Text("Thank you for your purchase!"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context); // Close dialog
-                            Navigator.of(context).popUntil((route) => route
-                                .isFirst); // Go back to the previous screen
-                          },
-                          child: Text("OK"),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await shopCardNotifier.checkout();
+                        setState(() {
+                          isLoading = false;
+                        });
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Order Confirmed"),
+                            content: Text("Thank you for your purchase!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close dialog
+                                  Navigator.of(context).popUntil((route) => route
+                                      .isFirst); // Go back to the previous screen
+                                },
+                                child: Text("OK"),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFEC1D3B),
                   padding: const EdgeInsets.symmetric(vertical: 15),
@@ -110,10 +125,19 @@ class CheckoutSummaryPage extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text(
-                  'Confirm Order',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
+                child: isLoading
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        'Confirm Order',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
               ),
             ),
           ],

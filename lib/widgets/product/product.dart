@@ -20,11 +20,9 @@ class ProductWidget extends ConsumerStatefulWidget {
 class _ProductWidgetState extends ConsumerState<ProductWidget> {
   @override
   Widget build(BuildContext context) {
-    // Watch the favorite and cart state
     final favoriteProducts = ref.watch(favoriteProductsProvider);
     final shopCardProducts = ref.watch(shopCardProvider);
 
-    // Check if product is in favorites and cart
     final isFavorite = favoriteProducts.contains(widget.product);
     final isInCart =
         shopCardProducts.any((item) => item.id == widget.product.id);
@@ -33,7 +31,6 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          // Navigate to Product Details Page
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -59,8 +56,7 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
           ),
           padding: const EdgeInsets.all(8.0),
           child: Stack(
-            clipBehavior:
-                Clip.none, // Allow icons to extend outside the container
+            clipBehavior: Clip.none, // Allows the heart icon to extend outside
             children: [
               // Product Info Section
               Column(
@@ -72,12 +68,11 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                       child: Image.asset(
                         widget.product.imageUrl,
                         width: double.infinity,
-                        fit: BoxFit.fitHeight,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
                   const SizedBox(height: 8),
-
                   // Product Name
                   Text(
                     widget.product.name,
@@ -89,7 +84,6 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-
                   // Product Brand
                   Text(
                     widget.product.brand,
@@ -100,7 +94,6 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-
                   // Product Price
                   Text(
                     '\$${widget.product.price.toStringAsFixed(2)}',
@@ -112,21 +105,33 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                 ],
               ),
 
-              // Favorite Icon - Positioned tightly at the top right
+              // Favorite Icon - Positioned above the product card
               Positioned(
-                top: -10,
-                right: -10,
-                child: IconButton(
-                  icon: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: isFavorite ? Colors.red : Colors.white,
+                top: -10, // Move it slightly above the card
+                right: 0, // Align it with the right edge of the card
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white, // Background color for the icon
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        spreadRadius: 2,
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    // Toggle the favorite status using the provider
-                    ref
-                        .read(favoriteProductsProvider.notifier)
-                        .toggleProductFavoriteStatus(widget.product);
-                  },
+                  child: IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : Colors.grey,
+                    ),
+                    onPressed: () {
+                      ref
+                          .read(favoriteProductsProvider.notifier)
+                          .toggleProductFavoriteStatus(widget.product);
+                    },
+                  ),
                 ),
               ),
 
@@ -143,12 +148,10 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                   ),
                   onPressed: () {
                     if (isInCart) {
-                      // Remove from cart if already in cart
                       ref
                           .read(shopCardProvider.notifier)
                           .removeProduct(widget.product);
                     } else {
-                      // Add to cart if not in cart
                       ref
                           .read(shopCardProvider.notifier)
                           .addProduct(widget.product);

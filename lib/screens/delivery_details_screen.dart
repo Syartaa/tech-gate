@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tech_gate/screens/check_out_payment.dart';
+import 'package:tech_gate/provider/user_provider.dart';
+import 'package:tech_gate/screens/checkout/check_out_payment.dart';
 import 'package:tech_gate/widgets/product/custom_text_field.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DeliveryDetailsScreen extends StatelessWidget {
+class DeliveryDetailsScreen extends ConsumerWidget {
   DeliveryDetailsScreen({super.key});
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -14,7 +16,20 @@ class DeliveryDetailsScreen extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userState = ref.watch(userProvider);
+
+    // Populate the controllers with user data when available
+    userState.whenData((user) {
+      if (user != null) {
+        _addressController.text = user.city;
+        _cityController.text = user.city;
+        _postalcodeController.text = user.postalCode.toString();
+        _phoneNumberController.text = user.phoneNumber;
+        _nameController.text = '${user.firstName} ${user.lastName}';
+      }
+    });
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tech_gate/provider/shop_card_provider.dart';
-import 'package:tech_gate/screens/checkout_summary_page.dart';
+import 'package:tech_gate/screens/checkout/checkout_summary_page.dart';
 import 'package:tech_gate/widgets/product/custom_text_field.dart';
 
 class CheckOutPayment extends ConsumerStatefulWidget {
@@ -18,7 +18,6 @@ class _CheckOutPaymentState extends ConsumerState<CheckOutPayment> {
   final TextEditingController _expiryDateController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _numberController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
   final TextEditingController _paypalEmailController = TextEditingController();
@@ -79,7 +78,7 @@ class _CheckOutPaymentState extends ConsumerState<CheckOutPayment> {
               ),
               const SizedBox(height: 20),
               // Render payment form based on selected payment method
-              if (selectedPaymentMethod != null) _buildPaymentForm(),
+              _buildPaymentForm(),
             ],
           ),
           SizedBox(
@@ -160,13 +159,22 @@ class _CheckOutPaymentState extends ConsumerState<CheckOutPayment> {
               labelText: "Card Number",
               controller: _cardNumberController,
             ),
+            SizedBox(
+              height: 10,
+            ),
             CustomTextField(
               labelText: "Expiry Date",
               controller: _expiryDateController,
             ),
+            SizedBox(
+              height: 10,
+            ),
             CustomTextField(
               labelText: "CVV",
               controller: _cvvController,
+            ),
+            SizedBox(
+              height: 10,
             ),
             CustomTextField(
               labelText: "Card Holder Name",
@@ -180,6 +188,9 @@ class _CheckOutPaymentState extends ConsumerState<CheckOutPayment> {
             CustomTextField(
               labelText: "Your Address",
               controller: _addressController,
+            ),
+            SizedBox(
+              height: 10,
             ),
             CustomTextField(
               labelText: "Additional Notes",

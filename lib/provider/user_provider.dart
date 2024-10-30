@@ -20,6 +20,24 @@ class UserNotifier extends StateNotifier<AsyncValue<Users?>> {
     });
   }
 
+  Future<bool> emailExists(String email) async {
+    try {
+      print('Checking if email $email exists...');
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1) // Limit to one result for performance
+          .get();
+
+      final exists = querySnapshot.docs.isNotEmpty;
+      print('Email exists: $exists');
+      return exists;
+    } catch (e) {
+      print('Error checking email existence: $e');
+      return false; // If there is an error, assume email doesn't exist
+    }
+  }
+
   Future<void> _loadUserData(String userId) async {
     try {
       print('Loading user data for UID: $userId');
@@ -110,12 +128,26 @@ class UserNotifier extends StateNotifier<AsyncValue<Users?>> {
   Future<void> login(String email, String password) async {
     try {
       state = const AsyncValue.loading();
+      print('Starting login process for $email');
+
+      // Check if the email exists in the database
+      bool exists = await emailExists(email);
+      if (!exists) {
+        // Set an error state without changing user data
+        state = AsyncValue.error(
+          'Email or Password not Valid. Please sign up.',
+          StackTrace.current,
+        );
+
+        return; // Stop further execution
+      }
+
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-
+      print('Login successful. Loading user data...');
       await _loadUserData(userCredential.user!.uid);
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
@@ -126,6 +158,33 @@ class UserNotifier extends StateNotifier<AsyncValue<Users?>> {
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
     state = const AsyncValue.data(null);
+  }
+
+  Future<void> updateUserProfile({
+    required String firstName,
+    required String lastName,
+    required DateTime birthday,
+    required String phoneNumber,
+    required Gender gender,
+    required String city,
+    required int postalCode,
+  }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({
+        'firstName': firstName,
+        'lastName': lastName,
+        'birthday': Timestamp.fromDate(birthday),
+        'phoneNumber': phoneNumber,
+        'gender': gender.name,
+        'city': city,
+        'postalCode': postalCode,
+      });
+      await _loadUserData(user.uid); // Refresh user data after update
+    }
   }
 }
 

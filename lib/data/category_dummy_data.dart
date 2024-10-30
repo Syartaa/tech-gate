@@ -14,7 +14,7 @@ final List<Category> dummyCategories = [
   Category(
     thumbnailImage: 'assets/smartwatch.jpg',
     categoryName: CategoryName.Smartwatch,
-    fullImage: 'assets/laptops.jpg',
+    fullImage: 'assets/watches.jpg',
   ),
   Category(
     thumbnailImage: 'assets/tv.jpg',
@@ -24,6 +24,6 @@ final List<Category> dummyCategories = [
   Category(
     thumbnailImage: 'assets/elektro.jpg',
     categoryName: CategoryName.Elektro,
-    fullImage: 'assets/laptops.jpg',
+    fullImage: 'assets/pajisje.jpg',
   ),
 ];
