@@ -17,6 +17,7 @@ class Product {
   final bool availability;
   final String color;
   int quantity;
+  final List<String> additionalImages;
 
   Product({
     required this.name,
@@ -30,6 +31,7 @@ class Product {
     required this.warranty,
     required this.availability,
     required this.color,
+    required this.additionalImages,
     this.quantity = 1,
     String? id,
   }) : id = id ?? uuid.v4();
@@ -50,6 +52,7 @@ class Product {
       releaseDate: releaseDate,
       warranty: warranty,
       availability: availability,
+      additionalImages: additionalImages,
     );
   }
 }

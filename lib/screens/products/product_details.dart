@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tech_gate/models/product.dart';
 import 'package:tech_gate/provider/shop_card_provider.dart';
-import 'package:tech_gate/screens/products/shop_card_screen.dart';
 
 class ProductDetailsPage extends ConsumerWidget {
   final Product product;
@@ -15,21 +14,18 @@ class ProductDetailsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // State to keep track of the selected image
+    final selectedImage = ValueNotifier<String>(product.imageUrl);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
             const Size.fromHeight(60), // Set custom height for AppBar
         child: AppBar(
-          backgroundColor:
-              Theme.of(context).colorScheme.primary, // AppBar color
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                product.name,
-                style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
-              ), // Display category name
-            ],
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          title: Text(
+            product.name,
+            style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
           ),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
@@ -43,40 +39,78 @@ class ProductDetailsPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image with "Not in Stock" overlay
+            // Display the selected image
             Center(
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Center(
-                      child: Image.asset(
-                        product.imageUrl,
-                        fit: BoxFit.contain,
-                        height: 250,
-                      ),
-                    ),
-                  ),
-                  if (!product.availability)
-                    Container(
-                      height: 250,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
+              child: ValueListenableBuilder<String>(
+                valueListenable: selectedImage,
+                builder: (context, imageUrl, _) {
+                  return Stack(
+                    children: [
+                      ClipRRect(
                         borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          imageUrl,
+                          fit: BoxFit.contain,
+                          height: 250,
+                        ),
                       ),
-                      child: Center(
-                        child: Text(
-                          'Not in Stock',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                      if (!product.availability)
+                        Container(
+                          height: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Not in Stock',
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Display additional images as thumbnails
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Primary image thumbnail
+                GestureDetector(
+                  onTap: () => selectedImage.value = product.imageUrl,
+                  child: Image.asset(
+                    product.imageUrl,
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Additional images thumbnails
+                ...product.additionalImages.map((image) => GestureDetector(
+                      onTap: () => selectedImage.value = image,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.asset(
+                            image,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ),
-                ],
-              ),
+                    )),
+              ],
             ),
             const SizedBox(height: 20),
 
@@ -103,10 +137,8 @@ class ProductDetailsPage extends ConsumerWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: product.availability ? Colors.green : Colors.red,
                     borderRadius: BorderRadius.circular(20),
@@ -223,10 +255,7 @@ class ProductDetailsPage extends ConsumerWidget {
                         );
                       }
                     : null,
-                icon: const Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                ),
+                icon: const Icon(Icons.shopping_cart, color: Colors.white),
                 label: Text(
                   'Add to Cart',
                   style: GoogleFonts.poppins(
