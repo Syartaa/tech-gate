@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/screens/home_screen.dart';
+import 'package:tech_gate/screens/products/order_history_screen.dart';
+import 'package:tech_gate/screens/products/track_order_screen.dart';
 import 'package:tech_gate/screens/profile/change_password.dart';
 import 'package:tech_gate/screens/profile/change_profile.dart';
 import 'package:tech_gate/screens/profile/delete_account.dart';
@@ -174,6 +176,14 @@ class ProfileScreen extends ConsumerWidget {
             ),
             SizedBox(
               height: 20,
+            ),
+            ProfileOption(
+              title: "Historia e blerjeve",
+              icon: Icons.history, // Custom icon
+              onTap: () async {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => OrderHistoryScreen()));
+              },
             ),
           ],
         );

@@ -96,7 +96,7 @@ class _CheckoutSummaryPageState extends ConsumerState<CheckoutSummaryPage> {
                         setState(() {
                           isLoading = true;
                         });
-                        await shopCardNotifier.checkout();
+                        await shopCardNotifier.checkout(ref);
                         setState(() {
                           isLoading = false;
                         });
