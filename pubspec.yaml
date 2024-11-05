@@ -50,5 +50,6 @@ flutter:
   assets:
     - assets/
     - assets/pdf/fletushka.pdf
+    - .env
   
   

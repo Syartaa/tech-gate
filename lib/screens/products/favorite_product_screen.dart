@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tech_gate/models/product.dart';
 import 'package:tech_gate/provider/favorite_product_provider.dart';
 import 'package:tech_gate/widgets/product/favorite_product_card.dart';
 

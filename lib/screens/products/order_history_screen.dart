@@ -10,7 +10,6 @@ class OrderHistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orderHistory = ref.watch(orderHistoryProvider);
     final activeOrders = ref
         .read(orderHistoryProvider.notifier)
         .activeOrders; // Get active orders

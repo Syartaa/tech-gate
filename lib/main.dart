@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tech_gate/firebase_options.dart';
 import 'package:tech_gate/widgets/auth_wrapper.dart'; // Import the AuthWrapper
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  print("Before loading .env file");
+  await dotenv.load(fileName: ".env");
+  print("After loading .env file");
 
   try {
     await Firebase.initializeApp(

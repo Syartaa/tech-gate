@@ -21,7 +21,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _birthdayController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();

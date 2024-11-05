@@ -25,54 +25,55 @@ class _ChangePasswordState extends State<ChangePassword> {
         padding: EdgeInsets.all(20.0),
         children: [
           Form(
+              key: _formKey,
               child: Column(
-            children: [
-              Text(
-                "Ndrysho Fjalekalimin",
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                    color: Colors.white),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              ProfileTextField(
-                  controller: _passwordController, labelText: "Password"),
-              SizedBox(
-                height: 15,
-              ),
-              ProfileTextField(
-                  controller: _newpasswordController,
-                  labelText: "New Password"),
-              SizedBox(
-                height: 15,
-              ),
-              ProfileTextField(
-                  controller: _confirmpasswordController,
-                  labelText: "Confirm Password"),
-              SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEC1D3B),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                children: [
+                  Text(
+                    "Ndrysho Fjalekalimin",
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                        color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  ProfileTextField(
+                      controller: _passwordController, labelText: "Password"),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  ProfileTextField(
+                      controller: _newpasswordController,
+                      labelText: "New Password"),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  ProfileTextField(
+                      controller: _confirmpasswordController,
+                      labelText: "Confirm Password"),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFEC1D3B),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Change Password',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    'Change Password',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ))
+                ],
+              ))
         ],
       ),
     );

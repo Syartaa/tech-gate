@@ -5,7 +5,6 @@ import 'package:tech_gate/models/user.dart';
 import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/widgets/custom_appbar.dart';
 import 'package:intl/intl.dart';
-import 'package:tech_gate/widgets/product/custom_text_field.dart';
 import 'package:tech_gate/widgets/profile/profile_text_field.dart';
 
 class ChangeProfileScreen extends ConsumerStatefulWidget {
