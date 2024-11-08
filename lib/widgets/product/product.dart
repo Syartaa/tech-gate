@@ -64,13 +64,19 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                 children: [
                   Expanded(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        widget.product.imageUrl,
-                        width: double.infinity,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          widget.product.imageUrl.isNotEmpty
+                              ? widget.product.imageUrl
+                              : 'assets/placeholder.png',
+                          width: double.infinity,
+                          fit: BoxFit.contain,
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) {
+                            return Image.asset(
+                                'assets/placeholder.png'); // Show a placeholder if there's an error
+                          },
+                        )),
                   ),
                   const SizedBox(height: 8),
                   // Product Name
@@ -85,14 +91,7 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                   ),
                   const SizedBox(height: 4),
                   // Product Brand
-                  Text(
-                    widget.product.brand,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+
                   const SizedBox(height: 4),
                   // Product Price
                   Text(
@@ -139,24 +138,29 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
               Positioned(
                 bottom: 8,
                 right: 8,
-                child: IconButton(
-                  icon: Icon(
-                    isInCart
-                        ? Icons.shopping_cart
-                        : Icons.shopping_cart_outlined,
-                    color: isInCart ? Colors.green : Colors.white,
+                child: Tooltip(
+                  message: isInCart
+                      ? 'Remove from cart'
+                      : 'Add to cart', // Add this line
+                  child: IconButton(
+                    icon: Icon(
+                      isInCart
+                          ? Icons.shopping_cart
+                          : Icons.shopping_cart_outlined,
+                      color: isInCart ? Colors.green : Colors.white,
+                    ),
+                    onPressed: () {
+                      if (isInCart) {
+                        ref
+                            .read(shopCardProvider.notifier)
+                            .removeProduct(widget.product);
+                      } else {
+                        ref
+                            .read(shopCardProvider.notifier)
+                            .addProduct(widget.product);
+                      }
+                    },
                   ),
-                  onPressed: () {
-                    if (isInCart) {
-                      ref
-                          .read(shopCardProvider.notifier)
-                          .removeProduct(widget.product);
-                    } else {
-                      ref
-                          .read(shopCardProvider.notifier)
-                          .addProduct(widget.product);
-                    }
-                  },
                 ),
               ),
             ],

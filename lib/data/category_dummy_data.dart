@@ -1,4 +1,4 @@
-import 'package:tech_gate/models/category.dart';
+import 'package:tech_gate/models/categories.dart';
 
 final List<Category> dummyCategories = [
   Category(

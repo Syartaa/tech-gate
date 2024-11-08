@@ -1,6 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tech_gate/data/category_dummy_data.dart';
+import 'package:tech_gate/models/category.dart';
+import 'package:tech_gate/provider/woo_commerce_api_provider.dart';
 
-final categoryProvider = Provider((ref) {
-  return dummyCategories;
+final categoryProvider = FutureProvider<List<dynamic>>((ref) async {
+  // Get the WooCommerceAPI instance
+  final api = ref.watch(wooCommerceAPIProvider);
+  final categoriesData =
+      await api.getCategories(); // Get the categories data from the API
+
+  return categoriesData
+      .map<Category>((categoryJson) => Category.fromJson(categoryJson))
+      .toList();
 });

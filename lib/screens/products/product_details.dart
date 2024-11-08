@@ -54,24 +54,24 @@ class ProductDetailsPage extends ConsumerWidget {
                           height: 250,
                         ),
                       ),
-                      if (!product.availability)
-                        Container(
-                          height: 250,
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Not in Stock',
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
+                      // if (!product.availability)
+                      //   Container(
+                      //     height: 250,
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.black.withOpacity(0.5),
+                      //       borderRadius: BorderRadius.circular(10),
+                      //     ),
+                      //     child: Center(
+                      //       child: Text(
+                      //         'Not in Stock',
+                      //         style: GoogleFonts.poppins(
+                      //           color: Colors.white,
+                      //           fontSize: 24,
+                      //           fontWeight: FontWeight.bold,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                   );
                 },
@@ -95,21 +95,21 @@ class ProductDetailsPage extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 // Additional images thumbnails
-                ...product.additionalImages.map((image) => GestureDetector(
-                      onTap: () => selectedImage.value = image,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            image,
-                            width: 60,
-                            height: 60,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    )),
+                // ...product.imageUrl.map((image) => GestureDetector(
+                //       onTap: () => selectedImage.value = image,
+                //       child: Padding(
+                //         padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                //         child: ClipRRect(
+                //           borderRadius: BorderRadius.circular(8),
+                //           child: Image.asset(
+                //             image,
+                //             width: 60,
+                //             height: 60,
+                //             fit: BoxFit.cover,
+                //           ),
+                //         ),
+                //       ),
+                //     )),
               ],
             ),
             const SizedBox(height: 20),
@@ -140,11 +140,11 @@ class ProductDetailsPage extends ConsumerWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: product.availability ? Colors.green : Colors.red,
+                    color: Colors.green,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    product.availability ? 'In Stock' : 'Out of Stock',
+                    'In Stock',
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -156,51 +156,39 @@ class ProductDetailsPage extends ConsumerWidget {
             const SizedBox(height: 10),
 
             // Brand and Model
-            Row(
-              children: [
-                const Icon(Icons.branding_watermark, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text(
-                  '${product.brand} - ${product.model}',
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
+
             const SizedBox(height: 10),
 
             // Release Date
-            Row(
-              children: [
-                const Icon(Icons.calendar_today_outlined, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text(
-                  'Released: ${product.releaseDate.toLocal().toString().split(' ')[0]}',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     const Icon(Icons.calendar_today_outlined, color: Colors.grey),
+            //     const SizedBox(width: 8),
+            //     Text(
+            //       'Released: ${product.releaseDate.toLocal().toString().split(' ')[0]}',
+            //       style: GoogleFonts.poppins(
+            //         fontSize: 16,
+            //         color: Colors.grey,
+            //       ),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 10),
 
             // Warranty Info
-            Row(
-              children: [
-                const Icon(Icons.verified_user, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text(
-                  'Warranty: ${product.warranty}',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     const Icon(Icons.verified_user, color: Colors.grey),
+            //     const SizedBox(width: 8),
+            //     Text(
+            //       'Warranty: ${product.warranty}',
+            //       style: GoogleFonts.poppins(
+            //         fontSize: 16,
+            //         color: Colors.grey,
+            //       ),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 20),
 
             // Divider
@@ -229,7 +217,7 @@ class ProductDetailsPage extends ConsumerWidget {
                 const Icon(Icons.category_outlined, color: Colors.grey),
                 const SizedBox(width: 8),
                 Text(
-                  'Category: ${product.category.name}',
+                  'Category: ${product.categoryIds}',
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                     color: Colors.grey,
@@ -244,17 +232,15 @@ class ProductDetailsPage extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: product.availability
-                    ? () {
-                        // Add to Cart Logic
-                        ref.read(shopCardProvider.notifier).addProduct(product);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('${product.name} added to cart!'),
-                          ),
-                        );
-                      }
-                    : null,
+                onPressed: () {
+                  // Add to Cart Logic
+                  ref.read(shopCardProvider.notifier).addProduct(product);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${product.name} added to cart!'),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.shopping_cart, color: Colors.white),
                 label: Text(
                   'Add to Cart',

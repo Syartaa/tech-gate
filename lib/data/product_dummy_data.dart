@@ -1,5 +1,5 @@
-import 'package:tech_gate/models/category.dart';
-import 'package:tech_gate/models/product.dart';
+import 'package:tech_gate/models/categories.dart';
+import 'package:tech_gate/models/products.dart';
 
 List<Product> dummyProducts = [
   Product(
