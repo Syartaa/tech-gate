@@ -24,4 +24,28 @@ class WooCommerceAPI {
       throw Exception('Failed to load products');
     }
   }
+
+  Future<List<dynamic>> getCategories() async {
+    final String url =
+        '$baseUrl/wp-json/wc/v3/products/categories?consumer_key=$consumerKey&consumer_secret=$consumerSecret';
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load categories');
+    }
+  }
+
+  Future<List<dynamic>> getProductsByCategory(String categoryId) async {
+    // Fetch products by category ID
+    final response = await http.get(Uri.parse(
+        '$baseUrl/wp-json/wc/v3/products?category=$categoryId&consumer_key=your_key&consumer_secret=your_secret'));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
 }

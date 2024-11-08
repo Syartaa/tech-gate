@@ -48,6 +48,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = AuthState.error(e.toString());
     }
   }
+
+  // Add the logout method
+  Future<void> logout() async {
+    state = AuthState.loading();
+    try {
+      await _authService
+          .logout(); // Optional: If you need to notify the backend
+      state = AuthState.initial();
+    } catch (e) {
+      state = AuthState.error(e.toString());
+    }
+  }
 }
 
 //authservice provider

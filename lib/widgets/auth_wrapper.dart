@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tech_gate/provider/user_provider.dart';
+import 'package:tech_gate/models/auth_state.dart';
+import 'package:tech_gate/provider/auth_provider.dart';
 import 'package:tech_gate/screens/bottom_app_bar.dart';
 import 'package:tech_gate/screens/welcome_screen.dart';
 
 class AuthWrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userAsyncValue = ref.watch(userProvider);
+    final authState = ref.watch(authNotifierProvider);
 
-    print('AuthWrapper: Current user state: $userAsyncValue');
+    print('AuthWrapper: Current auth state: $authState');
 
-    return userAsyncValue.when(
-      data: (user) {
-        if (user != null) {
-          return BottomAppBars(); // If user is authenticated, go to HomeScreen
-        } else {
-          return WelcomeScreen(); // If user is null, go to WelcomeScreen
-        }
-      },
+    return authState.when(
+      initial: () => WelcomeScreen(),
+      authenticated: (user) => BottomAppBars(),
       loading: () => const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       ),
-      error: (error, stackTrace) => Scaffold(
+      error: (error) => Scaffold(
         body: Center(child: Text('Error: $error')),
       ),
     );

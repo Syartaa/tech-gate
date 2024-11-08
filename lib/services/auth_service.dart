@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tech_gate/models/user.dart';
 
 class AuthService {
@@ -102,5 +103,11 @@ class AuthService {
     } else {
       throw Exception('Failed to fetch user details by email');
     }
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token'); // Clear token or any other user data
+    // Optionally: Notify backend to revoke the token if needed
   }
 }

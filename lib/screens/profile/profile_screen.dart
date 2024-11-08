@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tech_gate/models/auth_state.dart';
+import 'package:tech_gate/provider/auth_provider.dart';
 import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/screens/products/order_history_screen.dart';
 import 'package:tech_gate/screens/profile/change_password.dart';
@@ -18,6 +20,19 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Get user details from userProvider
     final userAsyncValue = ref.watch(userProvider);
+
+    final authState = ref.watch(authNotifierProvider);
+
+    // Only navigate to WelcomeScreen if the user is actually logged out or there’s an error
+    if (authState.user == null &&
+        authState.error == null &&
+        !authState.isLoading) {
+      Future.microtask(() {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (ctx) => WelcomeScreen()),
+        );
+      });
+    }
 
     return userAsyncValue.when(
       data: (user) {
@@ -102,9 +117,8 @@ class ProfileScreen extends ConsumerWidget {
               title: "Ç'kyçu",
               icon: Icons.logout, // Custom icon
               onTap: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => WelcomeScreen()));
+                //call the lgout method
+                await ref.read(authNotifierProvider.notifier).logout();
               },
             ),
             const SizedBox(height: 30),
