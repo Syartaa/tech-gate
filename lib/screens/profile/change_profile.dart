@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tech_gate/models/user.dart';
+import 'package:tech_gate/models/users.dart';
 import 'package:tech_gate/provider/user_provider.dart';
 import 'package:tech_gate/widgets/custom_appbar.dart';
 import 'package:intl/intl.dart';

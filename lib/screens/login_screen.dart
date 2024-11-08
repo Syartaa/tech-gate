@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tech_gate/provider/user_provider.dart';
+import 'package:tech_gate/provider/auth_provider.dart';
 import 'package:tech_gate/screens/bottom_app_bar.dart';
 import 'package:tech_gate/screens/signup_screen.dart';
 import 'package:tech_gate/widgets/custom_appbar.dart';
+import 'package:tech_gate/models/auth_state.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -24,15 +25,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final password = _passwordController.text;
 
       try {
-        // Call the login method from userProvider
-        await ref.read(userProvider.notifier).login(email, password);
+        // Call the login method from authNotifierProvider
+        await ref.read(authNotifierProvider.notifier).login(email, password);
 
         // Check the state after attempting login
-        final userState = ref.read(userProvider);
+        final userState = ref.read(authNotifierProvider);
         print('User state after login: $userState');
 
-        // Navigate only if the user is successfully loaded
-        if (userState.value != null && context.mounted) {
+        // Navigate only if the user is successfully authenticated
+        if (userState.user != null && context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => BottomAppBars()),
             (route) => false,
@@ -61,7 +62,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userProvider);
+    final userState = ref.watch(authNotifierProvider);
 
     return Scaffold(
       appBar: CustomAppBar(),
@@ -134,10 +135,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter your email';
-                                    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                                        .hasMatch(value)) {
-                                      return 'Please enter a valid email';
                                     }
+                                    // else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                    //     .hasMatch(value)) {
+                                    //   return 'Please enter a valid email';
+                                    // }
                                     return null;
                                   },
                                 ),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tech_gate/models/user.dart';
-import 'package:tech_gate/provider/user_provider.dart';
+import 'package:tech_gate/provider/auth_provider.dart';
 import 'package:tech_gate/widgets/custom_appbar.dart';
-import 'package:intl/intl.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -17,50 +15,30 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();
-
-  String _gender = 'Male'; // Default gender
-  DateTime? _selectedBirthday;
-
-  // Method to open the DatePicker dialog
-  Future<void> _selectBirthday(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2000), // Default date
-      firstDate: DateTime(1900), // Minimum date
-      lastDate: DateTime.now(), // Maximum date
-    );
-    if (pickedDate != null && pickedDate != _selectedBirthday) {
-      setState(() {
-        _selectedBirthday = pickedDate; // Store selected date
-      });
-    }
-  }
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
 
   void _signup() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final gender = _gender == 'Male' ? Gender.male : Gender.female;
-
-        // Call the signUp method from userProvider
-        await ref.read(userProvider.notifier).signUp(
-              email: _emailController.text,
-              password: _passwordController.text,
+        // Call the signup method from AuthNotifier
+        await ref.read(authNotifierProvider.notifier).signup(
               firstName: _firstNameController.text,
               lastName: _lastNameController.text,
-              birthday:
-                  _selectedBirthday!, // No need to parse from the text field
-              // Parse birthday
+              email: _emailController.text,
               phoneNumber: _phoneNumberController.text,
-              gender: gender,
+              address: _addressController.text,
               city: _cityController.text,
-              postalCode: int.parse(_postalCodeController.text),
+              postcode: _postalCodeController.text,
+              country: _countryController.text,
+              username: _usernameController.text,
+              password: _passwordController.text,
             );
 
         // Navigate back to login or another screen after successful signup
@@ -78,7 +56,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userProvider);
+    final authState = ref.watch(authNotifierProvider);
 
     return Scaffold(
       backgroundColor:
@@ -149,47 +127,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       const SizedBox(height: 16.0),
 
-                      // Birthday Field with DatePicker
-                      GestureDetector(
-                        onTap: () =>
-                            _selectBirthday(context), // Open DatePicker on tap
-                        child: AbsorbPointer(
-                          child: TextFormField(
-                            controller: TextEditingController(
-                              text: _selectedBirthday != null
-                                  ? DateFormat('yyyy-MM-dd')
-                                      .format(_selectedBirthday!)
-                                  : '', // Display the selected date if available
-                            ),
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
-                              labelText: 'Birthday',
-                              hintText:
-                                  'Select your birthday', // Shown when no date is selected
-                              suffixIcon: const Icon(Icons.calendar_today,
-                                  color: Colors.grey), // Calendar icon
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    const BorderSide(color: Colors.black),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color(0xFFEC1D3B), width: 1.5),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (_selectedBirthday == null) {
-                                return 'Please select your birthday';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 16.0),
-
                       // Phone Number Field
                       _buildInputField(
                         controller: _phoneNumberController,
@@ -197,47 +134,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       const SizedBox(height: 16.0),
 
-                      // Gender Selection
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Text(
-                            'Gender:',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Row(
-                            children: [
-                              Radio<String>(
-                                value: 'Male',
-                                groupValue: _gender,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _gender = value!;
-                                  });
-                                },
-                                activeColor: const Color(0xFFEC1D3B),
-                              ),
-                              const Text('Male',
-                                  style: TextStyle(color: Colors.black)),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Radio<String>(
-                                value: 'Female',
-                                groupValue: _gender,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _gender = value!;
-                                  });
-                                },
-                                activeColor: const Color(0xFFEC1D3B),
-                              ),
-                              const Text('Female',
-                                  style: TextStyle(color: Colors.black)),
-                            ],
-                          ),
-                        ],
+                      // Address Field
+                      _buildInputField(
+                        controller: _addressController,
+                        label: 'Address',
                       ),
                       const SizedBox(height: 16.0),
 
@@ -255,6 +155,20 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       const SizedBox(height: 16.0),
 
+                      // Country Field
+                      _buildInputField(
+                        controller: _countryController,
+                        label: 'Country',
+                      ),
+                      const SizedBox(height: 16.0),
+
+                      // Username Field
+                      _buildInputField(
+                        controller: _usernameController,
+                        label: 'Username',
+                      ),
+                      const SizedBox(height: 16.0),
+
                       // Password Field
                       _buildInputField(
                         controller: _passwordController,
@@ -263,25 +177,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       const SizedBox(height: 16.0),
 
-                      // Confirm Password Field
-                      _buildInputField(
-                        controller: _confirmPasswordController,
-                        label: 'Confirm Password',
-                        isPassword: true,
-                        validator: (value) {
-                          if (value != _passwordController.text) {
-                            return 'Passwords do not match';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20.0),
-
                       // Signup Button
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: ElevatedButton(
-                          onPressed: userState.isLoading ? null : _signup,
+                          onPressed: authState.isLoading ? null : _signup,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFEC1D3B),
                             padding: const EdgeInsets.symmetric(vertical: 15),
@@ -289,7 +189,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: userState.isLoading
+                          child: authState.isLoading
                               ? const CircularProgressIndicator(
                                   color: Colors.white,
                                 )
