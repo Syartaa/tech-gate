@@ -11,7 +11,7 @@ class ProductCategoriesSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100, // Adjust as needed for the slider height
+      height: 130, // Adjust for the increased space for text
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -38,6 +38,13 @@ class ProductCategoriesSlider extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.grey.shade300),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                   child: imageUrl.isNotEmpty
                       ? ClipOval(
@@ -48,17 +55,21 @@ class ProductCategoriesSlider extends StatelessWidget {
                             height: 70,
                           ),
                         )
-                      : Icon(Icons.category, size: 40),
+                      : Icon(Icons.category, size: 40, color: Colors.grey),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6), // Increased spacing for clarity
                 Container(
-                  width: 70, // Limit the width for the category text
+                  width: 80, // Increased width for text space
+                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
                   child: Text(
                     category.name,
-                    style:
-                        GoogleFonts.poppins(fontSize: 12, color: Colors.white),
-                    maxLines: 2, // Allow two lines
-                    overflow: TextOverflow.ellipsis, // Ellipsis for long text
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
                 ),
