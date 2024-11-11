@@ -5,13 +5,15 @@ class FavoriteProductsNotifier extends StateNotifier<List<Product>> {
   FavoriteProductsNotifier() : super([]);
 
   bool toggleProductFavoriteStatus(Product product) {
-    final productIsFavorite = state.contains(product);
+    final productIsFavorite = state.any((p) => p.id == product.id);
 
     if (productIsFavorite) {
-      state = state.where((p) => p.id != product.id).toList();
+      // Create a new list excluding the removed product
+      state = List.from(state)..removeWhere((p) => p.id == product.id);
       return false;
     } else {
-      state = [...state, product];
+      // Add the product if not already in the list
+      state = List.from(state)..add(product);
       return true;
     }
   }

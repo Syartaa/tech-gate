@@ -20,11 +20,18 @@ class FavoriteProductCard extends StatelessWidget {
         contentPadding: const EdgeInsets.all(12.0),
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.asset(
-            product.imageUrl,
-            width: 60,
-            height: 60,
+          child: Image.network(
+            product.imageUrl.isNotEmpty
+                ? product.imageUrl
+                : 'assets/placeholder.png',
+            width: 50, // Set proper size
+            height: 50, // Set proper size
             fit: BoxFit.contain,
+            errorBuilder:
+                (BuildContext context, Object error, StackTrace? stackTrace) {
+              return Image.asset('assets/placeholder.png',
+                  width: 50, height: 50); // Ensure fallback
+            },
           ),
         ),
         title: Text(

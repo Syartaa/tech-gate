@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tech_gate/data/flyer_dummy_data.dart';
 import 'package:tech_gate/provider/user_provider.dart';
-import 'package:tech_gate/screens/prduct_test.dart';
 import 'package:tech_gate/widgets/flyer_slider.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -77,10 +76,7 @@ class HomeScreen extends ConsumerWidget {
                 color: Colors.white,
               ),
               IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (ctx) => ProductTest()));
-                  },
+                  onPressed: () {},
                   icon: const Icon(
                     Icons.arrow_forward_ios,
                     size: 35,

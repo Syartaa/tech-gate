@@ -39,6 +39,7 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
               ),
             ),
           );
+          print('Navigating to product details: ${widget.product.name}');
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),

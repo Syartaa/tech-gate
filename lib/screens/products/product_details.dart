@@ -48,12 +48,33 @@ class ProductDetailsPage extends ConsumerWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
+                        child: Image.network(
                           imageUrl,
                           fit: BoxFit.contain,
                           height: 250,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          (loadingProgress.expectedTotalBytes ??
+                                              1)
+                                      : null,
+                                ),
+                              );
+                            }
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset('assets/placeholder.png',
+                                height: 250); // Placeholder
+                          },
                         ),
                       ),
+
                       // if (!product.availability)
                       //   Container(
                       //     height: 250,
@@ -80,38 +101,38 @@ class ProductDetailsPage extends ConsumerWidget {
             const SizedBox(height: 20),
 
             // Display additional images as thumbnails
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Primary image thumbnail
-                GestureDetector(
-                  onTap: () => selectedImage.value = product.imageUrl,
-                  child: Image.network(
-                    product.imageUrl,
-                    width: 60,
-                    height: 60,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Additional images thumbnails
-                // ...product.imageUrl.map((image) => GestureDetector(
-                //       onTap: () => selectedImage.value = image,
-                //       child: Padding(
-                //         padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                //         child: ClipRRect(
-                //           borderRadius: BorderRadius.circular(8),
-                //           child: Image.asset(
-                //             image,
-                //             width: 60,
-                //             height: 60,
-                //             fit: BoxFit.cover,
-                //           ),
-                //         ),
-                //       ),
-                //     )),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     // Primary image thumbnail
+            //     // GestureDetector(
+            //     //   onTap: () => selectedImage.value = product.imageUrl,
+            //     //   child: Image.network(
+            //     //     product.imageUrl,
+            //     //     width: 60,
+            //     //     height: 60,
+            //     //     fit: BoxFit.cover,
+            //     //   ),
+            //     // ),
+            //     // const SizedBox(width: 8),
+            //     // Additional images thumbnails
+            //     // ...product.imageUrl.map((image) => GestureDetector(
+            //     //       onTap: () => selectedImage.value = image,
+            //     //       child: Padding(
+            //     //         padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            //     //         child: ClipRRect(
+            //     //           borderRadius: BorderRadius.circular(8),
+            //     //           child: Image.asset(
+            //     //             image,
+            //     //             width: 60,
+            //     //             height: 60,
+            //     //             fit: BoxFit.cover,
+            //     //           ),
+            //     //         ),
+            //     //       ),
+            //     //     )),
+            //   ],
+            // ),
             const SizedBox(height: 20),
 
             // Product Name

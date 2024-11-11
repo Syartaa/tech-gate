@@ -55,5 +55,6 @@ flutter:
     - assets/
     - assets/pdf/fletushka.pdf
     - .env
+    - assets/placeholder.png
   
   

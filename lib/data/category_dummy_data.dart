@@ -1,29 +1,29 @@
-import 'package:tech_gate/models/categories.dart';
+// import 'package:tech_gate/models/categories.dart';
 
-final List<Category> dummyCategories = [
-  Category(
-    thumbnailImage: 'assets/4.jpg',
-    categoryName: CategoryName.Telefona,
-    fullImage: 'assets/phones.jpg',
-  ),
-  Category(
-    thumbnailImage: 'assets/laptop.jpg',
-    categoryName: CategoryName.Laptop,
-    fullImage: 'assets/laptops.jpg',
-  ),
-  Category(
-    thumbnailImage: 'assets/smartwatch.jpg',
-    categoryName: CategoryName.Smartwatch,
-    fullImage: 'assets/watches.jpg',
-  ),
-  Category(
-    thumbnailImage: 'assets/tv.jpg',
-    categoryName: CategoryName.Tv,
-    fullImage: 'assets/tvs.jpg',
-  ),
-  Category(
-    thumbnailImage: 'assets/elektro.jpg',
-    categoryName: CategoryName.Elektro,
-    fullImage: 'assets/pajisje.jpg',
-  ),
-];
+// final List<Category> dummyCategories = [
+//   Category(
+//     thumbnailImage: 'assets/4.jpg',
+//     categoryName: CategoryName.Telefona,
+//     fullImage: 'assets/phones.jpg',
+//   ),
+//   Category(
+//     thumbnailImage: 'assets/laptop.jpg',
+//     categoryName: CategoryName.Laptop,
+//     fullImage: 'assets/laptops.jpg',
+//   ),
+//   Category(
+//     thumbnailImage: 'assets/smartwatch.jpg',
+//     categoryName: CategoryName.Smartwatch,
+//     fullImage: 'assets/watches.jpg',
+//   ),
+//   Category(
+//     thumbnailImage: 'assets/tv.jpg',
+//     categoryName: CategoryName.Tv,
+//     fullImage: 'assets/tvs.jpg',
+//   ),
+//   Category(
+//     thumbnailImage: 'assets/elektro.jpg',
+//     categoryName: CategoryName.Elektro,
+//     fullImage: 'assets/pajisje.jpg',
+//   ),
+// ];
