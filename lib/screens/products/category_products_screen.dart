@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tech_gate/models/category.dart'; // Import Category model
-import 'package:tech_gate/widgets/product/product.dart'; // Assuming the ProductWidget is here
-import 'package:tech_gate/provider/woo_commerce_api_provider.dart'; // Import WooCommerce API provider
-
-final productProvider = FutureProvider<List<dynamic>>((ref) async {
-  // Get the WooCommerceAPI instance
-  final api = ref.watch(wooCommerceAPIProvider);
-
-  // Fetch the products from the API
-  return await api.getProducts();
-});
+import 'package:tech_gate/models/category.dart';
+import 'package:tech_gate/provider/product_provider.dart';
+import 'package:tech_gate/widgets/product/product.dart'; // Assuming ProductWidget is here
 
 class CategoryProductsScreen extends ConsumerWidget {
   final Category category; // Pass the category object
@@ -20,8 +12,9 @@ class CategoryProductsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Fetch the products from the provider
-    final productAsyncValue = ref.watch(productProvider);
+    // Use productByCategoryProvider to fetch products for this specific category
+    final productAsyncValue =
+        ref.watch(productByCategoryProvider(category.id.toString()));
 
     return Scaffold(
       appBar: PreferredSize(
@@ -33,9 +26,11 @@ class CategoryProductsScreen extends ConsumerWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                category.name,
-                style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+              Expanded(
+                child: Text(
+                  category.name,
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+                ),
               ), // Display category name
               Image.asset(
                 'assets/logo.png', // Add your logo image here
@@ -52,11 +47,6 @@ class CategoryProductsScreen extends ConsumerWidget {
       ),
       body: productAsyncValue.when(
         data: (products) {
-          // Filter the products based on the selected category
-          final filteredProducts = products.where((product) {
-            return product.categoryIds.contains(category.id);
-          }).toList();
-
           return Column(
             children: [
               Container(
@@ -68,8 +58,8 @@ class CategoryProductsScreen extends ConsumerWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(
                       15), // Ensure image fits border radius
-                  child: Image.asset(
-                    category.imageUrl, // Use the fullImage property
+                  child: Image.network(
+                    category.imageUrl, // Use the category image
                     width: double.infinity,
                     height: 200,
                     fit: BoxFit.cover,
@@ -79,7 +69,7 @@ class CategoryProductsScreen extends ConsumerWidget {
               const SizedBox(height: 10), // Add some spacing
 
               // Display the list of products in a GridView
-              filteredProducts.isNotEmpty
+              products.isNotEmpty
                   ? Expanded(
                       child: GridView.builder(
                         padding: const EdgeInsets.all(8.0),
@@ -91,9 +81,9 @@ class CategoryProductsScreen extends ConsumerWidget {
                           childAspectRatio:
                               0.75, // Adjust the height-to-width ratio
                         ),
-                        itemCount: filteredProducts.length,
+                        itemCount: products.length,
                         itemBuilder: (context, index) {
-                          final product = filteredProducts[index];
+                          final product = products[index];
                           return ProductWidget(
                             product: product,
                           ); // Use ProductWidget to display each product
@@ -104,7 +94,7 @@ class CategoryProductsScreen extends ConsumerWidget {
                       child: Center(
                         child: Text(
                           "No products available in this category",
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
                     ),

@@ -86,7 +86,7 @@ class ProductDetailsPage extends ConsumerWidget {
                 // Primary image thumbnail
                 GestureDetector(
                   onTap: () => selectedImage.value = product.imageUrl,
-                  child: Image.asset(
+                  child: Image.network(
                     product.imageUrl,
                     width: 60,
                     height: 60,

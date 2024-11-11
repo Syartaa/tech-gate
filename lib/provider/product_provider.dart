@@ -12,3 +12,11 @@ final productProvider = FutureProvider<List<Product>>((ref) async {
   // Map the JSON response to a list of Product objects
   return response.map<Product>((item) => Product.fromJson(item)).toList();
 });
+
+final productByCategoryProvider =
+    FutureProvider.family<List<Product>, String>((ref, categoryId) async {
+  final api = ref.watch(wooCommerceAPIProvider);
+
+  // Directly return the list of products
+  return await api.getProductsByCategory(categoryId);
+});

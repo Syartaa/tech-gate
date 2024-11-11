@@ -43,6 +43,7 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
+          width: 160, // Set a fixed width
           decoration: BoxDecoration(
             color: const Color(0xFF192a3a),
             borderRadius: BorderRadius.circular(12),
@@ -56,43 +57,46 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
           ),
           padding: const EdgeInsets.all(8.0),
           child: Stack(
-            clipBehavior: Clip.none, // Allows the heart icon to extend outside
+            clipBehavior: Clip.none,
             children: [
               // Product Info Section
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
+                    flex: 2,
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          widget.product.imageUrl.isNotEmpty
-                              ? widget.product.imageUrl
-                              : 'assets/placeholder.png',
-                          width: double.infinity,
-                          fit: BoxFit.contain,
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) {
-                            return Image.asset(
-                                'assets/placeholder.png'); // Show a placeholder if there's an error
-                          },
-                        )),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.product.imageUrl.isNotEmpty
+                            ? widget.product.imageUrl
+                            : 'assets/placeholder.png',
+                        width: double.infinity,
+                        fit: BoxFit.contain,
+                        errorBuilder: (BuildContext context, Object error,
+                            StackTrace? stackTrace) {
+                          return Image.asset('assets/placeholder.png');
+                        },
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 8),
-                  // Product Name
-                  Text(
-                    widget.product.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+
+                  // Product Name with fixed height container
+                  Container(
+                    height: 40, // Fixed height for consistency
+                    child: Text(
+                      widget.product.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-                  // Product Brand
 
-                  const SizedBox(height: 4),
                   // Product Price
                   Text(
                     '\$${widget.product.price.toStringAsFixed(2)}',
@@ -106,12 +110,12 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
 
               // Favorite Icon - Positioned above the product card
               Positioned(
-                top: -10, // Move it slightly above the card
-                right: 0, // Align it with the right edge of the card
+                top: -10,
+                right: 0,
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white, // Background color for the icon
+                    color: Colors.white,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -139,9 +143,7 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                 bottom: 8,
                 right: 8,
                 child: Tooltip(
-                  message: isInCart
-                      ? 'Remove from cart'
-                      : 'Add to cart', // Add this line
+                  message: isInCart ? 'Remove from cart' : 'Add to cart',
                   child: IconButton(
                     icon: Icon(
                       isInCart

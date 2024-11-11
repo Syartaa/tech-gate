@@ -1,6 +1,7 @@
 // woo_commerce_api.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tech_gate/models/product.dart';
 
 class WooCommerceAPI {
   final String baseUrl;
@@ -37,14 +38,23 @@ class WooCommerceAPI {
     }
   }
 
-  Future<List<dynamic>> getProductsByCategory(String categoryId) async {
-    // Fetch products by category ID
-    final response = await http.get(Uri.parse(
-        '$baseUrl/wp-json/wc/v3/products?category=$categoryId&consumer_key=your_key&consumer_secret=your_secret'));
+  Future<List<Product>> getProductsByCategory(String categoryId) async {
+    final url = Uri.parse(
+        '$baseUrl/wp-json/wc/v3/products?category=$categoryId&consumer_key=$consumerKey&consumer_secret=$consumerSecret');
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        // Parse each item as a Product
+        final List<dynamic> productList = json.decode(response.body);
+        return productList
+            .map((data) => Product.fromJson(data as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw Exception('Failed to load products: ${response.reasonPhrase}');
+      }
+    } catch (e) {
       throw Exception('Failed to load products');
     }
   }
