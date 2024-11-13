@@ -34,11 +34,14 @@ class _BottomAppBarsState extends State<BottomAppBars> {
   Widget build(BuildContext context) {
     // Conditionally show basket icon only on the CartScreen (index 1)
     bool showBasketIcon = _selectedIndex == 1;
+    bool showOfferIcon = _selectedIndex == 0;
 
     return Scaffold(
       extendBody: true, // Extend body behind the BottomNavigationBar
-      appBar:
-          CustomAppBar(showBasketIcon: showBasketIcon), // Pass the parameter
+      appBar: CustomAppBar(
+        showBasketIcon: showBasketIcon,
+        showOfferIcon: showOfferIcon,
+      ), // Pass the parameter
       body: _widgetOptions[_selectedIndex], // Display the selected screen
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );

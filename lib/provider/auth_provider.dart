@@ -8,11 +8,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier(this._authService) : super(AuthState.initial());
 
   Future<void> login(String email, String password) async {
+    print('Attempting login...');
     state = AuthState.loading();
     try {
       final user = await _authService.login(email, password);
-      state = AuthState.authenticated(user!);
+      print('User returned from AuthService: $user');
+      if (user != null) {
+        state = AuthState.authenticated(user);
+        print('Login successful: $user');
+      } else {
+        print('No user returned; login failed.');
+        state = AuthState.error('Login failed');
+      }
     } catch (e) {
+      print('Error during login: $e');
       state = AuthState.error(e.toString());
     }
   }

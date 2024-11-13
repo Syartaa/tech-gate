@@ -59,10 +59,16 @@ class CategoryProductsScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(
                       15), // Ensure image fits border radius
                   child: Image.network(
-                    category.imageUrl, // Use the category image
+                    category.imageUrl.isNotEmpty
+                        ? category.imageUrl
+                        : 'assets/placeholder.png',
                     width: double.infinity,
                     height: 200,
                     fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object error,
+                        StackTrace? stackTrace) {
+                      return Image.asset('assets/placeholder.png');
+                    },
                   ),
                 ),
               ),

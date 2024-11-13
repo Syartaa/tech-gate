@@ -58,4 +58,61 @@ class WooCommerceAPI {
       throw Exception('Failed to load products');
     }
   }
+
+  //add to cart
+  Future<void> addToCart(int productId, int quantity) async {
+    final String url =
+        '$baseUrl/wp-json/wc/store/cart/items?consumer_key=$consumerKey&consumer_secret=$consumerSecret';
+
+    final response = await http.post(Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'product_id': productId,
+          'quantity': quantity,
+        }));
+
+    if (response.statusCode == 201) {
+      // Product added successfully
+      print('Product added to cart');
+    } else {
+      // Print response body for debugging
+      print('Failed to add product to cart: ${response.body}');
+      throw Exception('Failed to add product to cart');
+    }
+  }
+
+  //remove cart items
+  Future<void> removeFromCart(int itemId) async {
+    final String url =
+        '$baseUrl/wp-json/wc/store/cart/items/$itemId?consumer_key=$consumerKey&consumer_secret=$consumerSecret';
+
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to remove product from cart');
+    }
+  }
+
+  //get cart items
+  Future<List<dynamic>> getCartItems() async {
+    final String url =
+        '$baseUrl/wp-json/wc/store/cart/items?consumer_key=$consumerKey&consumer_secret=$consumerSecret';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load cart items');
+    }
+  }
+
+  // Checkout cart items
+  Future<void> checkout() async {
+    final String url =
+        '$baseUrl/wp-json/wc/store/cart/checkout?consumer_key=$consumerKey&consumer_secret=$consumerSecret';
+    final response = await http.post(Uri.parse(url));
+
+    if (response.statusCode != 200) {
+      throw Exception('Checkout failed');
+    }
+  }
 }

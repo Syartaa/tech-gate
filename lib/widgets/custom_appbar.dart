@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tech_gate/provider/favorite_product_provider.dart';
+import 'package:tech_gate/screens/offer_page.dart';
 import 'package:tech_gate/screens/products/favorite_product_screen.dart';
 import 'package:tech_gate/screens/products/shop_card_screen.dart';
 import 'package:tech_gate/provider/shop_card_provider.dart'; // Import cart provider
 
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final bool showBasketIcon; // Control visibility of icons
+  final bool showOfferIcon;
 
-  const CustomAppBar({super.key, this.showBasketIcon = false});
+  const CustomAppBar(
+      {super.key, this.showBasketIcon = false, this.showOfferIcon = false});
 
   @override
   Size get preferredSize => const Size.fromHeight(60.0); // AppBar height
@@ -55,6 +58,9 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                       .center, // Center logo when icons are absent
               children: [
                 if (showBasketIcon)
+                  const Spacer(), // Adds spacing if icons present
+
+                if (showOfferIcon)
                   const Spacer(), // Adds spacing if icons present
 
                 // Centered Logo
@@ -153,6 +159,32 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                                 ),
                               ),
                             ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                if (showOfferIcon) const Spacer(),
+
+                if (showOfferIcon)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Shopping Cart Icon with Badge
+                      Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.local_offer),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OfferPage(),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ],
