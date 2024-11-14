@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tech_gate/models/product.dart';
@@ -105,32 +106,32 @@ class ProductDetailsPage extends ConsumerWidget {
             //   mainAxisAlignment: MainAxisAlignment.center,
             //   children: [
             //     // Primary image thumbnail
-            //     // GestureDetector(
-            //     //   onTap: () => selectedImage.value = product.imageUrl,
-            //     //   child: Image.network(
-            //     //     product.imageUrl,
-            //     //     width: 60,
-            //     //     height: 60,
-            //     //     fit: BoxFit.cover,
-            //     //   ),
-            //     // ),
-            //     // const SizedBox(width: 8),
+            //     GestureDetector(
+            //       onTap: () => selectedImage.value = product.imageUrl,
+            //       child: Image.network(
+            //         product.imageUrl,
+            //         width: 60,
+            //         height: 60,
+            //         fit: BoxFit.cover,
+            //       ),
+            //     ),
+            //     const SizedBox(width: 8),
             //     // Additional images thumbnails
-            //     // ...product.imageUrl.map((image) => GestureDetector(
-            //     //       onTap: () => selectedImage.value = image,
-            //     //       child: Padding(
-            //     //         padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            //     //         child: ClipRRect(
-            //     //           borderRadius: BorderRadius.circular(8),
-            //     //           child: Image.asset(
-            //     //             image,
-            //     //             width: 60,
-            //     //             height: 60,
-            //     //             fit: BoxFit.cover,
-            //     //           ),
-            //     //         ),
-            //     //       ),
-            //     //     )),
+            //     ...product.imageUrl.map((image) => GestureDetector(
+            //           onTap: () => selectedImage.value = image,
+            //           child: Padding(
+            //             padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            //             child: ClipRRect(
+            //               borderRadius: BorderRadius.circular(8),
+            //               child: Image.asset(
+            //                 image,
+            //                 width: 60,
+            //                 height: 60,
+            //                 fit: BoxFit.cover,
+            //               ),
+            //             ),
+            //           ),
+            //         )),
             //   ],
             // ),
             const SizedBox(height: 20),
@@ -224,12 +225,15 @@ class ProductDetailsPage extends ConsumerWidget {
                   color: Colors.white),
             ),
             const SizedBox(height: 10),
-            Text(
+            // Text(
+            //   product.description,
+            //   style: GoogleFonts.poppins(
+            //       fontSize: 16, height: 1.5, color: Colors.white),
+            // ),
+            HtmlWidget(
               product.description,
-              style: GoogleFonts.poppins(
-                  fontSize: 16, height: 1.5, color: Colors.white),
+              textStyle: TextStyle(color: Colors.white),
             ),
-
             const SizedBox(height: 20),
 
             // Category Section

@@ -8,6 +8,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.5.3
+  
 
 
 dependencies:
@@ -37,6 +38,8 @@ dependencies:
   shared_preferences: ^2.3.2
   freezed: ^2.5.7
   flutter_spinkit: ^5.2.1
+  flutter_widget_from_html: ^0.15.3
+  
 
   
 
