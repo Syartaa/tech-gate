@@ -88,7 +88,6 @@ class ProductDetailsPage extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Loop through all images, including the first one, and display them as thumbnails
                 ...product.images.map((image) {
                   return GestureDetector(
                     onTap: () => selectedImage.value = image,
@@ -151,6 +150,35 @@ class ProductDetailsPage extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
 
+            const SizedBox(height: 20),
+
+            // Brand, Color, and Capacity Section (before the description)
+            Text(
+              'Brand: ${product.brand}',
+              style: GoogleFonts.poppins(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Color: ${product.color}',
+              style: GoogleFonts.poppins(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Capacity: ${product.capacity}',
+              style: GoogleFonts.poppins(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             const SizedBox(height: 20),
 
             // Divider
