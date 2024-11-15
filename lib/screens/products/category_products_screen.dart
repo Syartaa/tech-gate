@@ -6,23 +6,20 @@ import 'package:tech_gate/provider/product_provider.dart';
 import 'package:tech_gate/widgets/product/product.dart'; // Assuming ProductWidget is here
 
 class CategoryProductsScreen extends ConsumerWidget {
-  final Category category; // Pass the category object
+  final Category category;
 
   const CategoryProductsScreen({super.key, required this.category});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Use productByCategoryProvider to fetch products for this specific category
     final productAsyncValue =
         ref.watch(productByCategoryProvider(category.id.toString()));
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            const Size.fromHeight(60), // Set custom height for AppBar
+        preferredSize: const Size.fromHeight(60),
         child: AppBar(
-          backgroundColor:
-              Theme.of(context).colorScheme.primary, // AppBar color
+          backgroundColor: Theme.of(context).colorScheme.primary,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -31,16 +28,16 @@ class CategoryProductsScreen extends ConsumerWidget {
                   category.name,
                   style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
                 ),
-              ), // Display category name
+              ),
               Image.asset(
-                'assets/logo.png', // Add your logo image here
+                'assets/logo.png',
                 height: 40,
               ),
             ],
           ),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(30), // Bottom border rounded
+              bottom: Radius.circular(30),
             ),
           ),
         ),
@@ -50,14 +47,12 @@ class CategoryProductsScreen extends ConsumerWidget {
           return Column(
             children: [
               Container(
-                margin:
-                    const EdgeInsets.all(16.0), // Add margin around the image
+                margin: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15), // Set border radius
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                      15), // Ensure image fits border radius
+                  borderRadius: BorderRadius.circular(15),
                   child: Image.network(
                     category.imageUrl.isNotEmpty
                         ? category.imageUrl
@@ -72,27 +67,24 @@ class CategoryProductsScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 10), // Add some spacing
-
-              // Display the list of products in a GridView
+              const SizedBox(height: 10),
               products.isNotEmpty
                   ? Expanded(
                       child: GridView.builder(
                         padding: const EdgeInsets.all(8.0),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // 2 products per row
+                          crossAxisCount: 2,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
-                          childAspectRatio:
-                              0.75, // Adjust the height-to-width ratio
+                          childAspectRatio: 0.75,
                         ),
                         itemCount: products.length,
                         itemBuilder: (context, index) {
                           final product = products[index];
                           return ProductWidget(
                             product: product,
-                          ); // Use ProductWidget to display each product
+                          );
                         },
                       ),
                     )
@@ -107,15 +99,89 @@ class CategoryProductsScreen extends ConsumerWidget {
             ],
           );
         },
-        loading: () =>
-            const Center(child: CircularProgressIndicator()), // Loading spinner
+        loading: () => Column(
+          children: [
+            const SkeletonCategoryImage(), // New skeleton for category image
+            const SizedBox(height: 10),
+            const Expanded(child: ProductGridSkeletonLoader()), // Grid skeleton
+          ],
+        ),
         error: (error, stackTrace) => Center(
           child: Text(
             'Error: $error',
             style: GoogleFonts.poppins(color: Colors.red),
           ),
-        ), // Error message
+        ),
       ),
+    );
+  }
+}
+
+// Skeleton loader for category image
+class SkeletonCategoryImage extends StatelessWidget {
+  const SkeletonCategoryImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      width: double.infinity,
+      height: 200,
+      decoration: BoxDecoration(
+        color: Colors.grey[800],
+        borderRadius: BorderRadius.circular(15),
+      ),
+    );
+  }
+}
+
+// Skeleton loader for products grid
+class ProductGridSkeletonLoader extends StatelessWidget {
+  const ProductGridSkeletonLoader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(8.0),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 0.75,
+      ),
+      itemCount: 4,
+      itemBuilder: (context, index) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[800],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  color: Colors.grey[700],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 15,
+                color: Colors.grey[700],
+              ),
+              const SizedBox(height: 4),
+              Container(
+                height: 15,
+                width: 80,
+                color: Colors.grey[700],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

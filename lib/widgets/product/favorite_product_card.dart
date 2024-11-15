@@ -21,8 +21,8 @@ class FavoriteProductCard extends StatelessWidget {
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: Image.network(
-            product.imageUrl.isNotEmpty
-                ? product.imageUrl
+            product.images.isNotEmpty
+                ? product.images[0]
                 : 'assets/placeholder.png',
             width: 50, // Set proper size
             height: 50, // Set proper size

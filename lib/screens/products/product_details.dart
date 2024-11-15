@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tech_gate/models/product.dart';
 import 'package:tech_gate/provider/shop_card_provider.dart';
 
@@ -16,7 +16,9 @@ class ProductDetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // State to keep track of the selected image
-    final selectedImage = ValueNotifier<String>(product.imageUrl);
+    final selectedImage = ValueNotifier<String>(product.images.isNotEmpty
+        ? product.images[0]
+        : ''); // Initialize with the first image
 
     return Scaffold(
       appBar: PreferredSize(
@@ -75,25 +77,6 @@ class ProductDetailsPage extends ConsumerWidget {
                           },
                         ),
                       ),
-
-                      // if (!product.availability)
-                      //   Container(
-                      //     height: 250,
-                      //     decoration: BoxDecoration(
-                      //       color: Colors.black.withOpacity(0.5),
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //     child: Center(
-                      //       child: Text(
-                      //         'Not in Stock',
-                      //         style: GoogleFonts.poppins(
-                      //           color: Colors.white,
-                      //           fontSize: 24,
-                      //           fontWeight: FontWeight.bold,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
                     ],
                   );
                 },
@@ -101,39 +84,30 @@ class ProductDetailsPage extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
 
-            // Display additional images as thumbnails
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     // Primary image thumbnail
-            //     GestureDetector(
-            //       onTap: () => selectedImage.value = product.imageUrl,
-            //       child: Image.network(
-            //         product.imageUrl,
-            //         width: 60,
-            //         height: 60,
-            //         fit: BoxFit.cover,
-            //       ),
-            //     ),
-            //     const SizedBox(width: 8),
-            //     // Additional images thumbnails
-            //     ...product.imageUrl.map((image) => GestureDetector(
-            //           onTap: () => selectedImage.value = image,
-            //           child: Padding(
-            //             padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            //             child: ClipRRect(
-            //               borderRadius: BorderRadius.circular(8),
-            //               child: Image.asset(
-            //                 image,
-            //                 width: 60,
-            //                 height: 60,
-            //                 fit: BoxFit.cover,
-            //               ),
-            //             ),
-            //           ),
-            //         )),
-            //   ],
-            // ),
+            // Display all images as thumbnails (including the first one)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Loop through all images, including the first one, and display them as thumbnails
+                ...product.images.map((image) {
+                  return GestureDetector(
+                    onTap: () => selectedImage.value = image,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          image,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ],
+            ),
             const SizedBox(height: 20),
 
             // Product Name
@@ -177,40 +151,6 @@ class ProductDetailsPage extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
 
-            // Brand and Model
-
-            const SizedBox(height: 10),
-
-            // Release Date
-            // Row(
-            //   children: [
-            //     const Icon(Icons.calendar_today_outlined, color: Colors.grey),
-            //     const SizedBox(width: 8),
-            //     Text(
-            //       'Released: ${product.releaseDate.toLocal().toString().split(' ')[0]}',
-            //       style: GoogleFonts.poppins(
-            //         fontSize: 16,
-            //         color: Colors.grey,
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            const SizedBox(height: 10),
-
-            // Warranty Info
-            // Row(
-            //   children: [
-            //     const Icon(Icons.verified_user, color: Colors.grey),
-            //     const SizedBox(width: 8),
-            //     Text(
-            //       'Warranty: ${product.warranty}',
-            //       style: GoogleFonts.poppins(
-            //         fontSize: 16,
-            //         color: Colors.grey,
-            //       ),
-            //     ),
-            //   ],
-            // ),
             const SizedBox(height: 20),
 
             // Divider
@@ -225,11 +165,6 @@ class ProductDetailsPage extends ConsumerWidget {
                   color: Colors.white),
             ),
             const SizedBox(height: 10),
-            // Text(
-            //   product.description,
-            //   style: GoogleFonts.poppins(
-            //       fontSize: 16, height: 1.5, color: Colors.white),
-            // ),
             HtmlWidget(
               product.description,
               textStyle: TextStyle(color: Colors.white),

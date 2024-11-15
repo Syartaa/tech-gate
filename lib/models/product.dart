@@ -4,7 +4,8 @@ class Product {
   final String slug;
   final String description;
   final double price;
-  final String imageUrl;
+  final List<String>
+      images; // Changed from a single image URL to a list of image URLs
   final List<int> categoryIds;
   final int quantity;
 
@@ -14,22 +15,28 @@ class Product {
     required this.slug,
     required this.description,
     required this.price,
-    required this.imageUrl,
+    required this.images, // Now expects a list of image URLs
     required this.categoryIds,
     this.quantity = 1,
   });
 
   // Convert a JSON object to a Product object
   factory Product.fromJson(Map<String, dynamic> json) {
+    // Extract image URLs, assuming 'images' is a list of image objects
+    List<String> imageUrls = [];
+    if (json['images'] is List) {
+      imageUrls = (json['images'] as List)
+          .map((image) => image['src'] as String)
+          .toList();
+    }
+
     return Product(
       id: json['id'] as int,
       name: json['name'] ?? '',
       slug: json['slug'] ?? '',
       description: json['description'] ?? '',
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
-      imageUrl: (json['images'] as List).isNotEmpty
-          ? json['images'][0]['src'] as String
-          : '', // Default to empty string if no image
+      images: imageUrls, // Assign the image URLs list
       categoryIds: (json['categories'] as List<dynamic>)
           .map((category) => category['id'] as int)
           .toList(),
@@ -44,7 +51,9 @@ class Product {
       'slug': slug,
       'description': description,
       'price': price,
-      'imageUrl': imageUrl,
+      'images': images
+          .map((imageUrl) => {'src': imageUrl})
+          .toList(), // Convert list of images to JSON
       'categoryIds': categoryIds,
       'quantity': quantity,
     };
@@ -58,7 +67,7 @@ class Product {
       slug: slug,
       description: description,
       price: price,
-      imageUrl: imageUrl,
+      images: images, // Keep the existing images
       categoryIds: categoryIds,
       quantity: quantity ?? this.quantity,
     );

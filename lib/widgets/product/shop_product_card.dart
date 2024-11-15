@@ -22,7 +22,7 @@ class ShopProductCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.network(
-              product.imageUrl,
+              product.images[0],
               width: 80,
               height: 80,
               fit: BoxFit.contain,

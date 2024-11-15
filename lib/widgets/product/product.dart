@@ -69,8 +69,8 @@ class _ProductWidgetState extends ConsumerState<ProductWidget> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
-                        widget.product.imageUrl.isNotEmpty
-                            ? widget.product.imageUrl
+                        widget.product.images.isNotEmpty
+                            ? widget.product.images[0]
                             : 'assets/placeholder.png',
                         width: double.infinity,
                         fit: BoxFit.contain,
